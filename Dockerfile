@@ -1,5 +1,5 @@
 # 使用 Node.js 作为基础镜像
-FROM node:14 as build-stage
+FROM node:lts-alpine as build-stage
 
 # 安装 pnpm
 RUN npm install -g pnpm
