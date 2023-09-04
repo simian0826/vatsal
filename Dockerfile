@@ -8,7 +8,7 @@ RUN npm install -g pnpm
 WORKDIR /app
 
 # 复制 package.json 和 pnpm-lock.yaml 到容器中
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml scripts/preinstall.js ./
 
 # 安装项目依赖
 RUN pnpm install
