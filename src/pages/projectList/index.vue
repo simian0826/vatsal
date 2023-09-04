@@ -26,7 +26,7 @@
           <div class="sub-title">{{ item.subtitle }}</div>
           <div class="title">{{ item.title }}</div>
           <div class="location-container">
-            <el-icon color="#005482" style="margin-right: 6px;">
+            <el-icon color="#005482" style="margin-right: 6px">
               <Location />
             </el-icon>
             <span>{{ item.location }}</span>
@@ -54,7 +54,7 @@
           <div class="sub-title">{{ item.subtitle }}</div>
           <div class="title">{{ item.title }}</div>
           <div class="location-container">
-            <el-icon color="#005482" style="margin-right: 6px;">
+            <el-icon color="#005482" style="margin-right: 6px">
               <Location />
             </el-icon>
             <span>{{ item.location }}</span>
