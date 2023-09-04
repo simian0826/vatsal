@@ -1,0 +1,52 @@
+import { ConfigEnv, UserConfigExport } from "vite";
+import vue from "@vitejs/plugin-vue";
+import { viteMockServe } from "vite-plugin-mock";
+import path from "path";
+import legacy from "@vitejs/plugin-legacy";
+import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
+const resolve = (dir) => path.resolve(__dirname, dir);
+
+// https://vitejs.dev/config/
+export default ({ command }: ConfigEnv): UserConfigExport => {
+  return {
+    // root: "/",
+    base: "./",
+    plugins: [
+      vue(),
+      viteMockServe({
+        mockPath: "@/../mock",
+        localEnabled: command === "serve", //开发阶段能使用mock
+      }),
+      //svg 插件
+      createSvgIconsPlugin({
+        iconDirs: [path.resolve(process.cwd(), "src./assets/icons")],
+        symbolId: "icon-[dir]-[name]",
+      }),
+      legacy({
+        targets: ["chrome < 60", "edge < 15"],
+        renderLegacyChunks: true,
+      }),
+    ],
+    server: {
+      proxy: {
+        "/api": "http://localhost:5173",
+      },
+    },
+    build: {
+      // assetsDir: "./", // 这里替换成你想要的公共路径
+    },
+    resolve: {
+      alias: {
+        "@": path.resolve("./src"),
+      },
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          javascriptEnabled: true,
+          additionalData: `@import "@/style/variable.scss";`,
+        },
+      },
+    },
+  };
+};

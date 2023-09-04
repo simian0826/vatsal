@@ -1,0 +1,307 @@
+<template>
+  <div class="project-list-container">
+    <div class="hero-container">
+      <img
+        class="hero-image"
+        src="https://miclglobal.com/wp-content/uploads/2022/08/Shipping-Avenue-Townhomes-1.jpg"
+      />
+    </div>
+    <div class="content-container">
+      <el-row>
+        <el-col :span="8" class="category-container">
+          <div
+            :key="index"
+            v-for="(item, index) in categoryList"
+            class="category-item-container"
+            @click="changeCategoryHandler(item.value)"
+          >
+            <div class="category-name">{{ item.name }}</div>
+            <el-icon size="18"><Plus /></el-icon>
+          </div>
+        </el-col>
+        <el-col :span="16" class="list-container">
+          <div
+            v-for="(item, index) in presentItemList"
+            :key="index"
+            class="commodity-item-container"
+          >
+            <img class="commodity-image" :src="item.img" />
+            <div class="text-area">
+              <div class="commodity-type">{{ item.type }}</div>
+              <div class="commodity-name">{{ item.name }}</div>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from "vue";
+// import { useRouter } from "vue-router";
+
+// const router = useRouter();
+
+type CategoryListItem = {
+  name: string;
+  value: "tile" | "stone" | "woodDoor" | "plumbing" | "light";
+};
+interface CategoryItemGroupObject {
+  [key: string]: { img: string; type: string; name: string }[];
+}
+
+const categoryList = ref<CategoryListItem[]>([
+  {
+    name: "Tile",
+    value: "tile",
+  },
+  {
+    name: "Stone",
+    value: "stone",
+  },
+  {
+    name: "Wood Door",
+    value: "woodDoor",
+  },
+  {
+    name: "Plumbing",
+    value: "plumbing",
+  },
+  {
+    name: "Light",
+    value: "light",
+  },
+]);
+
+const categoryItemGroup = ref<CategoryItemGroupObject>({
+  tile: [
+    {
+      img: "./assets/1.jpg",
+      type: "marble",
+      name: "Onice Nero",
+    },
+    {
+      img: "./assets/2.jpg",
+      type: "marble",
+      name: "Statuario Freddo",
+    },
+    {
+      img: "./assets/3.jpg",
+      type: "marble",
+      name: "Onice Aria Beige",
+    },
+    {
+      img: "./assets/4.jpg",
+      type: "marble",
+      name: "Quarzo Verde Aqua",
+    },
+    {
+      img: "./assets/5.jpg",
+      type: "stone",
+      name: "Gabbro Sfumato",
+    },
+    {
+      img: "./assets/6.jpg",
+      type: "stone",
+      name: "Vicenza Beige",
+    },
+  ],
+  stone: [
+    {
+      img: "./assets/7.jpg",
+      type: "marble",
+      name: "Onice Nero",
+    },
+    {
+      img: "./assets/8.jpg",
+      type: "marble",
+      name: "Statuario Freddo",
+    },
+    {
+      img: "./assets/9.jpg",
+      type: "marble",
+      name: "Onice Aria Beige",
+    },
+    {
+      img: "./assets/10.jpg",
+      type: "marble",
+      name: "Quarzo Verde Aqua",
+    },
+  ],
+  woodDoor: [
+    {
+      img: "./assets/11.jpg",
+      type: "stone",
+      name: "Gabbro Sfumato",
+    },
+    {
+      img: "./assets/12.jpg",
+      type: "stone",
+      name: "Vicenza Beige",
+    },
+    {
+      img: "./assets/13.jpg",
+      type: "stone",
+      name: "Gabbro Sfumato",
+    },
+    {
+      img: "./assets/14.jpg",
+      type: "stone",
+      name: "Vicenza Beige",
+    },
+    {
+      img: "./assets/2.jpg",
+      type: "stone",
+      name: "Vicenza Beige",
+    },
+    {
+      img: "./assets/3.jpg",
+      type: "stone",
+      name: "Vicenza Beige",
+    },
+    {
+      img: "./assets/4.jpg",
+      type: "stone",
+      name: "Vicenza Beige",
+    },
+  ],
+  plumbing: [
+    {
+      img: "./assets/15.jpg",
+      type: "stone",
+      name: "Gabbro Sfumato",
+    },
+    {
+      img: "./assets/16.jpg",
+      type: "stone",
+      name: "Vicenza Beige",
+    },
+    {
+      img: "./assets/17.jpg",
+      type: "stone",
+      name: "Gabbro Sfumato",
+    },
+    {
+      img: "./assets/18.jpg",
+      type: "stone",
+      name: "Vicenza Beige",
+    },
+    {
+      img: "./assets/1.jpg",
+      type: "stone",
+      name: "Vicenza Beige",
+    },
+  ],
+  light: [
+    {
+      img: "./assets/19.jpg",
+      type: "stone",
+      name: "Gabbro Sfumato",
+    },
+    {
+      img: "./assets/20.jpg",
+      type: "stone",
+      name: "Vicenza Beige",
+    },
+  ],
+});
+
+const presentItemList = ref([...categoryItemGroup.value.tile]);
+
+const changeCategoryHandler = (category: string) => {
+  presentItemList.value = categoryItemGroup.value[category];
+};
+
+// const productList = ref([
+//   {
+//     mainImage:"",
+//   }
+// ])
+</script>
+
+<style scoped lang="scss">
+.project-list-container {
+  width: 100%;
+  position: relative;
+
+  .hero-container {
+    width: 100%;
+    height: 100vh;
+    .hero-image {
+      width: 100%;
+      height: 100vh;
+      object-fit: cover;
+    }
+  }
+
+  .content-container {
+    width: 100%;
+    max-width: 1400px;
+    min-height: 800px;
+    padding: 80px 0;
+    margin: 0 auto;
+
+    .category-container {
+      height: 400px;
+      overflow-y: scroll;
+      padding-right: 40px;
+
+      .category-item-container {
+        width: 100%;
+        margin: 40px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        align-content: flex-start;
+        cursor: pointer;
+
+        .category-name {
+          font-size: 18px;
+          color: #111;
+          text-transform: uppercase;
+        }
+      }
+    }
+
+    .list-container {
+      display: grid;
+      justify-content: space-between;
+      grid-template-columns: repeat(2, 50%);
+      grid-gap: 20px 20px;
+
+      .commodity-item-container {
+        position: relative;
+        aspect-ratio: 2.4/1;
+
+        .commodity-image {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+        .text-area {
+          width: 100%;
+          padding: 20px;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+
+          .commodity-type {
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+          }
+          .commodity-name {
+            font-size: 28px;
+            color: #fff;
+            text-transform: capitalize;
+          }
+        }
+      }
+    }
+  }
+}
+</style>
