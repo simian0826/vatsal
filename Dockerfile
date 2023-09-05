@@ -31,7 +31,7 @@ WORKDIR /app
 COPY dist/  ./
 
 # 构建生产环境代码
-RUN npm run build
+# RUN npm run build
 
 # 使用 nginx 作为基础镜像
 FROM nginx:stable-alpine as production-stage
