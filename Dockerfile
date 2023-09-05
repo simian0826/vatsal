@@ -28,7 +28,7 @@ RUN npm install -g pnpm
 # 设置工作目录
 WORKDIR /app
 
-COPY dist  ./
+COPY dist  ./dist
 
 # 构建生产环境代码
 # RUN npm run build
