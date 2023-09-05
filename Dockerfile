@@ -1,3 +1,24 @@
+# # 使用 Node.js 作为基础镜像
+# FROM node:lts-alpine as build-stage
+
+# # 安装 pnpm
+# RUN npm install -g pnpm
+
+# # 设置工作目录
+# WORKDIR /app
+
+# # 复制 package.json 和 pnpm-lock.yaml 到容器中
+# COPY package.json pnpm-lock.yaml  ./
+
+# # 复制 preinstall 到容器中
+# COPY scripts/preinstall.js  ./scripts/
+
+
+# # 安装项目依赖
+# RUN pnpm install
+
+# # 复制源代码到容器中
+# COPY . .
 # 使用 Node.js 作为基础镜像
 FROM node:lts-alpine as build-stage
 
@@ -7,18 +28,7 @@ RUN npm install -g pnpm
 # 设置工作目录
 WORKDIR /app
 
-# 复制 package.json 和 pnpm-lock.yaml 到容器中
-COPY package.json pnpm-lock.yaml  ./
-
-# 复制 preinstall 到容器中
-COPY scripts/preinstall.js  ./scripts/
-
-
-# 安装项目依赖
-RUN pnpm install
-
-# 复制源代码到容器中
-COPY . .
+COPY dist/  ./
 
 # 构建生产环境代码
 RUN npm run build
