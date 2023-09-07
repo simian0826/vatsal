@@ -12,7 +12,7 @@
           class="block-container"
           :key="index"
           v-for="(item, index) in onGoingProjects"
-          @click="router.push({ path: '/projectDetail' })"
+          @click="router.push({ path: `/projectDetail/${item.id}` })"
         >
           <div class="block">
             <img class="bg-image" :src="item.image" />

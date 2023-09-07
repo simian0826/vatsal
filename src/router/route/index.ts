@@ -37,7 +37,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/pages/productList/index.vue"),
       },
       {
-        path: "/productDetail",
+        path: "/productDetail/:id",
         name: "ProductDetail",
         component: () => import("@/pages/productDetail/index.vue"),
       },
@@ -47,7 +47,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/pages/projectList/index.vue"),
       },
       {
-        path: "/projectDetail",
+        path: "/projectDetail/:id",
         name: "ProjectDetail",
         component: () => import("@/pages/projectDetail/index.vue"),
       },

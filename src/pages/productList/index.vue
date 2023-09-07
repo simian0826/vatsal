@@ -24,6 +24,7 @@
         </el-col>
         <el-col :span="16" class="list-container">
           <div
+            @click="router.push({ path: `/productDetail/${item.id}` })"
             v-for="(item, index) in presentItemList"
             :key="index"
             class="commodity-item-container"
@@ -41,15 +42,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import productListData from "@/data/productList";
 import { CategoryTypeValue } from "@/types/productList";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
-console.log(router);
-
-const route = useRoute();
 
 const selectedCategory = ref<CategoryTypeValue>("tile");
 
@@ -64,9 +62,19 @@ const changeCategoryHandler = (category: CategoryTypeValue) => {
   presentItemList.value = categoryItemGroup.value[category];
 };
 
+const routeProductType = computed(
+  () => router.currentRoute.value.query.productType,
+);
+watch(routeProductType, () => {
+  selectedCategory.value = router.currentRoute.value.query
+    .productType as CategoryTypeValue;
+  presentItemList.value = categoryItemGroup.value[selectedCategory.value];
+});
+
 onMounted(() => {
-  if (route.params.productType) {
-    selectedCategory.value = route.params.productType as CategoryTypeValue;
+  if (router.currentRoute.value.query.productType) {
+    selectedCategory.value = router.currentRoute.value.query
+      .productType as CategoryTypeValue;
   } else {
     const keys = Object.keys(categoryItemGroup.value) as CategoryTypeValue[];
     selectedCategory.value = keys[0];
