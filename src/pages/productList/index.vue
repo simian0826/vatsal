@@ -13,6 +13,9 @@
             :key="index"
             v-for="(item, index) in categoryList"
             class="category-item-container"
+            :class="{
+              selected: selectedCategory == item.value,
+            }"
             @click="changeCategoryHandler(item.value)"
           >
             <div class="category-name">{{ item.name }}</div>
@@ -38,186 +41,38 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-// import { useRouter } from "vue-router";
+import { ref, onMounted } from "vue";
+import productListData from "@/data/productList";
+import { CategoryTypeValue } from "@/types/productList";
+import { useRouter, useRoute } from "vue-router";
 
-// const router = useRouter();
+const router = useRouter();
+console.log(router);
 
-type CategoryListItem = {
-  name: string;
-  value: "tile" | "stone" | "woodDoor" | "plumbing" | "light";
-};
-interface CategoryItemGroupObject {
-  [key: string]: { img: string; type: string; name: string }[];
-}
+const route = useRoute();
 
-const categoryList = ref<CategoryListItem[]>([
-  {
-    name: "Tile",
-    value: "tile",
-  },
-  {
-    name: "Stone",
-    value: "stone",
-  },
-  {
-    name: "Wood Door",
-    value: "woodDoor",
-  },
-  {
-    name: "Plumbing",
-    value: "plumbing",
-  },
-  {
-    name: "Light",
-    value: "light",
-  },
-]);
+const selectedCategory = ref<CategoryTypeValue>("tile");
 
-const categoryItemGroup = ref<CategoryItemGroupObject>({
-  tile: [
-    {
-      img: "./assets/1.jpg",
-      type: "marble",
-      name: "Onice Nero",
-    },
-    {
-      img: "./assets/2.jpg",
-      type: "marble",
-      name: "Statuario Freddo",
-    },
-    {
-      img: "./assets/3.jpg",
-      type: "marble",
-      name: "Onice Aria Beige",
-    },
-    {
-      img: "./assets/4.jpg",
-      type: "marble",
-      name: "Quarzo Verde Aqua",
-    },
-    {
-      img: "./assets/5.jpg",
-      type: "stone",
-      name: "Gabbro Sfumato",
-    },
-    {
-      img: "./assets/6.jpg",
-      type: "stone",
-      name: "Vicenza Beige",
-    },
-  ],
-  stone: [
-    {
-      img: "./assets/7.jpg",
-      type: "marble",
-      name: "Onice Nero",
-    },
-    {
-      img: "./assets/8.jpg",
-      type: "marble",
-      name: "Statuario Freddo",
-    },
-    {
-      img: "./assets/9.jpg",
-      type: "marble",
-      name: "Onice Aria Beige",
-    },
-    {
-      img: "./assets/10.jpg",
-      type: "marble",
-      name: "Quarzo Verde Aqua",
-    },
-  ],
-  woodDoor: [
-    {
-      img: "./assets/11.jpg",
-      type: "stone",
-      name: "Gabbro Sfumato",
-    },
-    {
-      img: "./assets/12.jpg",
-      type: "stone",
-      name: "Vicenza Beige",
-    },
-    {
-      img: "./assets/13.jpg",
-      type: "stone",
-      name: "Gabbro Sfumato",
-    },
-    {
-      img: "./assets/14.jpg",
-      type: "stone",
-      name: "Vicenza Beige",
-    },
-    {
-      img: "./assets/2.jpg",
-      type: "stone",
-      name: "Vicenza Beige",
-    },
-    {
-      img: "./assets/3.jpg",
-      type: "stone",
-      name: "Vicenza Beige",
-    },
-    {
-      img: "./assets/4.jpg",
-      type: "stone",
-      name: "Vicenza Beige",
-    },
-  ],
-  plumbing: [
-    {
-      img: "./assets/15.jpg",
-      type: "stone",
-      name: "Gabbro Sfumato",
-    },
-    {
-      img: "./assets/16.jpg",
-      type: "stone",
-      name: "Vicenza Beige",
-    },
-    {
-      img: "./assets/17.jpg",
-      type: "stone",
-      name: "Gabbro Sfumato",
-    },
-    {
-      img: "./assets/18.jpg",
-      type: "stone",
-      name: "Vicenza Beige",
-    },
-    {
-      img: "./assets/1.jpg",
-      type: "stone",
-      name: "Vicenza Beige",
-    },
-  ],
-  light: [
-    {
-      img: "./assets/19.jpg",
-      type: "stone",
-      name: "Gabbro Sfumato",
-    },
-    {
-      img: "./assets/20.jpg",
-      type: "stone",
-      name: "Vicenza Beige",
-    },
-  ],
-});
+const categoryList = ref(productListData.categoryList);
 
-const presentItemList = ref([...categoryItemGroup.value.tile]);
+const categoryItemGroup = ref(productListData.categoryItemGroup);
 
-const changeCategoryHandler = (category: string) => {
+const presentItemList = ref(categoryItemGroup.value[selectedCategory.value]);
+
+const changeCategoryHandler = (category: CategoryTypeValue) => {
+  selectedCategory.value = category;
   presentItemList.value = categoryItemGroup.value[category];
 };
 
-// const productList = ref([
-//   {
-//     mainImage:"",
-//   }
-// ])
+onMounted(() => {
+  if (route.params.productType) {
+    selectedCategory.value = route.params.productType as CategoryTypeValue;
+  } else {
+    const keys = Object.keys(categoryItemGroup.value) as CategoryTypeValue[];
+    selectedCategory.value = keys[0];
+  }
+  presentItemList.value = categoryItemGroup.value[selectedCategory.value];
+});
 </script>
 
 <style scoped lang="scss">
@@ -249,12 +104,25 @@ const changeCategoryHandler = (category: string) => {
 
       .category-item-container {
         width: 100%;
-        margin: 40px 0;
+        margin: 20px 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
         align-content: flex-start;
         cursor: pointer;
+        padding: 20px 10px;
+
+        &.selected {
+          background-color: #111;
+          color: #fff;
+
+          .category-name {
+            font-size: 18px;
+            color: #fff;
+
+            text-transform: uppercase;
+          }
+        }
 
         .category-name {
           font-size: 18px;

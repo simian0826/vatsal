@@ -41,16 +41,12 @@
                 </template>
                 <div class="sub-menu-container">
                   <router-link
-                    to="/productList"
-                    v-scroll-to="{
-                      el: item.path,
-                      offset: -100,
-                    }"
+                    :to="`/productList?productType=${item.value}`"
                     :key="index"
                     v-for="(item, index) in productsMenu"
                     class="sub-menu-item-container"
                   >
-                    <img class="sub-img" :src="item.img" />
+                    <img class="sub-img" :src="item.image" />
                     <div class="sub-menu-item-name">{{ item.name }}</div>
                   </router-link>
                 </div>
@@ -110,11 +106,8 @@
 </template>
 
 <script setup lang="ts">
-interface footerNavItem {
-  sectionName: string;
-  link: string;
-  children?: footerNavItem[];
-}
+import { FooterNavItem } from "@/types/layout";
+import layoutData from "@/data/layout";
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 const vueRouter = useRouter();
@@ -135,19 +128,11 @@ const menu = ref([
   { name: "Contact Us", path: "" },
 ]);
 
-const productsMenu = ref([
-  { name: "Product 1", path: "", img: "./assets/1.jpg" },
-  { name: "Product 2", path: "", img: "./assets/2.jpg" },
-  { name: "Product 3", path: "", img: "./assets/3.jpg" },
-  { name: "Product 4", path: "", img: "./assets/4.jpg" },
-  { name: "Product 5", path: "", img: "./assets/5.jpg" },
-  { name: "Product 6", path: "", img: "./assets/6.jpg" },
-  { name: "Product 7", path: "", img: "./assets/7.jpg" },
-]);
+const productsMenu = ref(layoutData.productsMenu);
 const activeRoute = computed(() => {
   return vueRouter.currentRoute.value.path;
 });
-const footerNav = ref<footerNavItem[]>([
+const footerNav = ref<FooterNavItem[]>([
   {
     sectionName: "About Us",
     link: "/aboutUs",

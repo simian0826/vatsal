@@ -1,10 +1,7 @@
 <template>
   <div class="project-list-container">
     <div class="hero-container">
-      <img
-        class="hero-image"
-        src="https://miclglobal.com/wp-content/uploads/2022/08/Shipping-Avenue-Townhomes-1.jpg"
-      />
+      <img class="hero-image" :src="heroImgUrl" />
     </div>
 
     <div class="ongoing-container" id="ongoing">
@@ -26,7 +23,12 @@
           <div class="sub-title">{{ item.subtitle }}</div>
           <div class="title">{{ item.title }}</div>
           <div class="location-container">
-            <el-icon color="#005482" style="margin-right: 6px">
+            <el-icon
+              color="#005482"
+              :style="{
+                marginRight: '6px',
+              }"
+            >
               <Location />
             </el-icon>
             <span>{{ item.location }}</span>
@@ -54,7 +56,12 @@
           <div class="sub-title">{{ item.subtitle }}</div>
           <div class="title">{{ item.title }}</div>
           <div class="location-container">
-            <el-icon color="#005482" style="margin-right: 6px">
+            <el-icon
+              color="#005482"
+              :style="{
+                marginRight: '6px',
+              }"
+            >
               <Location />
             </el-icon>
             <span>{{ item.location }}</span>
@@ -68,73 +75,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import projectListData from "@/data/projectList";
+import { ProjectListItem } from "@/types/projectList";
 
 const router = useRouter();
+const heroImgUrl = ref<string>(projectListData.heroImgUrl);
+const onGoingProjects = ref<ProjectListItem[]>(projectListData.ongoingProjects);
 
-const onGoingProjects = ref([
-  {
-    title: "Porcelain Tiles",
-    subtitle: "RESIDENTIAL",
-    location: "Miami Beach",
-    image:
-      "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caeea1/64d54eb7f99a540e86caeeaa_patrick-hendry-eDgUyGu93Yw-unsplash.jpg",
-  },
-  {
-    title: "Porcelain Tiles",
-    subtitle: "RESIDENTIAL",
-    location: "Miami Beach",
-
-    image:
-      "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caeea1/64d54eb7f99a540e86caeea8_ryan-holloway-JyDmUaXMib4-unsplash.jpg",
-  },
-
-  {
-    title: "Porcelain Tiles",
-    subtitle: "RESIDENTIAL",
-    location: "Miami Beach",
-    image:
-      "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caeea1/64d54eb7f99a540e86caeea7_denisse-leon-J7CjWufjmg4-unsplash.jpg",
-  },
-]);
-
-const completedProjects = ref([
-  {
-    title: "Porcelain Tiles",
-    subtitle: "RESIDENTIAL",
-    location: "Miami Beach",
-    image:
-      "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caeea1/64d54eb7f99a540e86caeeaa_patrick-hendry-eDgUyGu93Yw-unsplash.jpg",
-  },
-  {
-    title: "Porcelain Tiles",
-    subtitle: "RESIDENTIAL",
-    location: "Miami Beach",
-
-    image:
-      "https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-1.jpg",
-  },
-  {
-    title: "Porcelain Tiles",
-    subtitle: "RESIDENTIAL",
-    location: "Miami Beach",
-    image:
-      "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caeea1/64d54eb7f99a540e86caeea7_denisse-leon-J7CjWufjmg4-unsplash.jpg",
-  },
-  {
-    title: "Porcelain Tiles",
-    subtitle: "RESIDENTIAL",
-    location: "Miami Beach",
-    image:
-      "https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-1.jpg",
-  },
-  {
-    title: "Porcelain Tiles",
-    subtitle: "RESIDENTIAL",
-    location: "Miami Beach",
-    image:
-      "https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-1.jpg",
-  },
-]);
+const completedProjects = ref<ProjectListItem[]>(
+  projectListData.completedProjects,
+);
 
 // const productList = ref([
 //   {
@@ -161,7 +111,7 @@ const completedProjects = ref([
   .ongoing-container,
   .completed-container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     min-height: 100%;
     padding: 80px 0;
     margin: 0 auto;
