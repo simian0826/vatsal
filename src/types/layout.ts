@@ -4,7 +4,11 @@ export type FooterNavItem = {
   link: string;
   children?: FooterNavItem[];
 };
-
+export type MenuItem = {
+  name: string;
+  path: string;
+  children?: MenuItem[];
+};
 export type ProductsMenuItem = CategoryListItem & {
   image: string;
 };

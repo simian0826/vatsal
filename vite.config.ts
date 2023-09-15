@@ -4,7 +4,7 @@ import { viteMockServe } from "vite-plugin-mock";
 import path from "path";
 import legacy from "@vitejs/plugin-legacy";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
-const resolve = (dir) => path.resolve(__dirname, dir);
+// const resolve = (dir) => path.resolve(__dirname, dir);
 
 // https://vitejs.dev/config/
 export default ({ command }: ConfigEnv): UserConfigExport => {

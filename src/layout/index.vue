@@ -4,58 +4,82 @@
       class="nav-header"
       :style="{
         boxShadow: isTop ? 'none' : '0px 0px 16px #33333333',
-        background: isTop ? 'transparent' : '#f1f0ea',
+        // background: isTop
+        //   ? 'transparent'
+        //   : 'linear-gradient(#99999933 10%, #66666633 70% , #00000033 100%)',
+        background: '#00000022',
       }"
     >
       <div class="header-content">
-        <img
-          class="logo"
-          src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54f4b1fdac99df37742ee_Untitled.png"
-        />
-        <div class="nav-container">
-          <el-menu
-            :default-active="activeRoute"
-            mode="horizontal"
-            class="menu-container"
-            router
-          >
-            <el-menu-item
-              :key="index"
-              :index="item.path"
-              v-for="(item, index) in menu"
-              :class="activeRoute === item.path ? 'is-active' : ''"
-            >
-              <div class="menu-item-title" v-if="item.name !== 'Products'">
-                {{ item.name }}
-              </div>
-              <el-popover
-                v-else
-                placement="bottom"
-                :width="990"
-                trigger="hover"
-              >
-                <template #reference>
-                  <div class="menu-item-title">
-                    {{ item.name }}
-                  </div>
-                </template>
-                <div class="sub-menu-container">
-                  <router-link
-                    :to="`/productList?productType=${item.value}`"
-                    :key="index"
-                    v-for="(item, index) in productsMenu"
-                    class="sub-menu-item-container"
-                  >
-                    <img class="sub-img" :src="item.image" />
-                    <div class="sub-menu-item-name">{{ item.name }}</div>
-                  </router-link>
+        <img class="logo" src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54f4b1fdac99df37742ee_Untitled.png" />
+      </div>
+      <div class="nav-container">
+        <el-menu :default-active="activeRoute" router mode="horizontal" class="menu-container">
+          <el-menu-item :key="index" :index="item.path" v-for="(item, index) in menu" :class="activeRoute === item.path ? 'is-active' : ''" @click="menuItemClick(item)">
+            <!-- <div class="menu-item-title">
+              {{ item.name }}
+            </div> -->
+            <div class="menu-item-title" v-if="item.name !== 'Products'">
+              {{ item.name }}
+            </div>
+            <el-popover v-else placement="bottom" :width="990" trigger="hover">
+              <template #reference>
+                <div class="menu-item-title">
+                  {{ item.name }}
                 </div>
-              </el-popover>
-            </el-menu-item>
-          </el-menu>
-        </div>
+              </template>
+              <div class="sub-menu-container">
+                <router-link :to="`/productList?productType=${item.value}`" :key="index" v-for="(item, index) in productsMenu" class="sub-menu-item-container">
+                  <img class="sub-img" :src="item.image" />
+                  <div class="sub-menu-item-name">{{ item.name }}</div>
+                </router-link>
+              </div>
+            </el-popover>
+          </el-menu-item>
+        </el-menu>
       </div>
     </div>
+    <!-- <el-drawer
+      class="drawer"
+      v-model="showDrawer"
+      direction="rtl"
+      size="50%"
+      :with-header="false"
+      @opened="drawerOpened = true"
+      @closed="drawerOpened = false"
+    >
+      <div
+        class="nav-container"
+        :style="{
+          opacity: drawerOpened ? 1 : 0,
+          backgroundColor: drawerOpened ? '#000' : 'transparent',
+        }"
+      >
+        <el-menu
+          :default-active="activeRoute"
+          mode="horizontal"
+          class="menu-container"
+        >
+          <el-menu-item
+            :key="index"
+            :index="item.path"
+            v-for="(item, index) in menu"
+            :class="activeRoute === item.path ? 'is-active' : ''"
+            @click="menuItemClick(item)"
+          >
+            <div class="menu-item-title">
+              {{ item.name }}
+            </div>
+          </el-menu-item>
+        </el-menu>
+      </div>
+      <div
+        class="drawer-content"
+        :style="{
+          backgroundColor: drawerOpened ? '#000' : 'transparent',
+        }"
+      ></div>
+    </el-drawer> -->
     <div class="child-view">
       <router-view v-slot="{ Component, route }">
         <transition name="animation" mode="out-in">
@@ -67,10 +91,7 @@
       <div class="footer-content">
         <el-row>
           <el-col :span="4">
-            <img
-              src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54f4b1fdac99df37742ee_Untitled.png"
-              class="footer-logo"
-            />
+            <img src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54f4b1fdac99df37742ee_Untitled.png" class="footer-logo" />
           </el-col>
           <el-col :span="20">
             <el-row>
@@ -81,10 +102,7 @@
                   </router-link>
                 </div>
                 <ul v-if="item.children">
-                  <li
-                    :key="subIndex"
-                    v-for="(subItem, subIndex) in item.children"
-                  >
+                  <li :key="subIndex" v-for="(subItem, subIndex) in item.children">
                     <router-link
                       :to="item.link"
                       v-scroll-to="{
@@ -106,7 +124,7 @@
 </template>
 
 <script setup lang="ts">
-import { FooterNavItem } from "@/types/layout";
+import { FooterNavItem, MenuItem } from "@/types/layout";
 import layoutData from "@/data/layout";
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
@@ -119,16 +137,30 @@ window.addEventListener("scroll", () => {
     isTop.value = true;
   }
 });
-console.log(vueRouter);
-const menu = ref([
+
+const showDrawer = ref<boolean>(false);
+// const drawerOpened = ref<boolean>(false);
+
+const menu = ref<MenuItem[]>([
   { name: "Home", path: "/home" },
   { name: "About Us", path: "/aboutUs" },
-  { name: "Products", path: "/productList" },
+  {
+    name: "Products",
+    path: "/productList",
+    // children: [...layoutData.productsMenu],
+  },
   { name: "Projects", path: "/projectList" },
   { name: "Contact Us", path: "" },
 ]);
 
 const productsMenu = ref(layoutData.productsMenu);
+
+const menuItemClick = (item: MenuItem) => {
+  console.log(item);
+  if (item.children) {
+    showDrawer.value = true;
+  }
+};
 const activeRoute = computed(() => {
   return vueRouter.currentRoute.value.path;
 });
@@ -218,7 +250,11 @@ const footerNav = ref<FooterNavItem[]>([
   box-sizing: border-box;
   flex-wrap: wrap;
   // padding-top: var(--headerH);
-
+  :deep(.el-overlay) {
+    .drawer {
+      background: transparent !important;
+    }
+  }
   .nav-header {
     width: 100%;
     position: fixed;
@@ -237,37 +273,66 @@ const footerNav = ref<FooterNavItem[]>([
       display: flex;
       align-items: center;
       justify-content: space-between;
-      max-width: 1200px;
+      max-width: 1400px;
       width: 100%;
       margin: 0 auto;
       .logo {
         width: 100px;
         height: 100px;
       }
+    }
 
-      .nav-container {
-        width: 680px;
+    .nav-container {
+      position: absolute;
+      top: 0;
+      right: 100px;
+      width: 70%;
+      height: 100%;
+      display: flex;
+      justify-content: flex-end;
+      .menu-container {
         height: 100%;
-        .menu-container {
-          height: 100%;
-          background-color: transparent;
-          border-bottom: none;
+        width: 100%;
+        background-color: transparent;
+        border-bottom: none;
+        justify-content: flex-end;
+
+        .is-active {
           .menu-item-title {
             font-size: 18px;
-            // color: #f1f0ea;
+            color: #fef623;
+            position: relative;
+            background: radial-gradient(ellipse at center, #ffffff66 20%, transparent 75%, transparent 100%);
+            &::before,
+            &::after {
+              content: "";
+              width: 4px;
+              height: 4px;
+              border-radius: 50%;
+
+              background-color: #fff;
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+            }
+            &::before {
+              left: -10px;
+            }
+            &::after {
+              content: "";
+
+              right: -10px;
+            }
           }
         }
-      }
-    }
+        .menu-item-title {
+          width: 90px;
+          text-align: center;
 
-    .el-menu--horizontal > .el-menu-item.is-active {
-      border-bottom: none;
-    }
-    .el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
-    .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
-      outline: 0;
-      color: var(--el-menu-hover-text-color);
-      background-color: transparent;
+          font-size: 18px;
+          color: #fff;
+        }
+      }
     }
   }
 
@@ -320,6 +385,7 @@ const footerNav = ref<FooterNavItem[]>([
     }
   }
 }
+
 .sub-menu-container {
   width: 100%;
   padding: 20px;
@@ -340,5 +406,95 @@ const footerNav = ref<FooterNavItem[]>([
       color: #111;
     }
   }
+}
+
+:deep(.el-drawer__body) {
+  padding: 0;
+
+  .nav-container {
+    position: absolute;
+    top: 0;
+    // right: 100px;
+    width: 100%;
+    padding-right: 100px;
+    // width: 70%;
+    height: var(--headerH);
+    display: flex;
+    justify-content: flex-end;
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    .menu-container {
+      height: 100%;
+      width: 100%;
+      background-color: transparent;
+      border-bottom: none;
+      justify-content: flex-end;
+
+      .is-active {
+        .menu-item-title {
+          font-size: 18px;
+          color: #fef623;
+          position: relative;
+          background: radial-gradient(ellipse at center, #ffffff66 20%, transparent 75%, transparent 100%);
+          &::before,
+          &::after {
+            content: "";
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+
+            background-color: #fff;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+          &::before {
+            left: -10px;
+          }
+          &::after {
+            content: "";
+
+            right: -10px;
+          }
+        }
+      }
+      .menu-item-title {
+        width: 90px;
+        text-align: center;
+
+        font-size: 18px;
+        color: #fff;
+      }
+    }
+  }
+
+  .drawer-content {
+    margin-top: var(--headerH);
+    height: calc(100% - var(--headerH));
+    background-color: #000;
+    transition: background-color 0.3s;
+  }
+}
+
+:deep(.el-menu--horizontal > .el-menu-item.is-active),
+:deep(.el-menu--horizontal > .el-menu-item) {
+  border-bottom: none;
+}
+// .el-menu--horizontal > .el-menu-item.is-active,
+// .el-menu--horizontal > .el-menu-item {
+//   border-bottom: none;
+// }
+// .el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
+// .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
+//   outline: 0;
+//   color: var(--el-menu-hover-text-color);
+//   background-color: transparent;
+// }
+:deep(.el-menu--horizontal .el-menu-item:not(.is-disabled):focus),
+:deep(.el-menu--horizontal .el-menu-item:not(.is-disabled):hover) {
+  outline: 0;
+  color: var(--el-menu-hover-text-color);
+  background-color: transparent;
 }
 </style>

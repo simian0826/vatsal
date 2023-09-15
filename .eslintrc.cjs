@@ -30,7 +30,7 @@ module.exports = {
     "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-var": "error", // Allows `let` and `const` declarations instead of `var`
-    "no-unexpected-multiline": "error", // 禁止出现多行
+    "no-unexpected-multiline": "off", // 禁止出现多行
     "no-useless-escape": "error", // Prevents common escape sequences
 
     //typeScript

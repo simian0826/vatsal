@@ -1,7 +1,51 @@
 <template>
   <div class="home-container">
+    <swiper-container
+      ref="swiperRef"
+      :style="{
+        maxWidth: '100vw',
+        height: '100vh',
+        overflow: 'hidden',
+      }"
+      :threshold="1"
+      :touchRatio="2.5"
+      :scrollbar="true"
+      :creativeEffect="creativeEffect"
+      :effect="'creative'"
+      slideNextClass="swiper-slide-next"
+    >
+      <swiper-slide
+        class="swiper-slide-item"
+        v-for="(item, index) in heroImageList"
+        :key="index"
+        :style="{
+          '--url': `url('${item}')`,
+        }"
+      >
+        <div class="carousel-item-container">
+          <div class="content">
+            <div class="header">Value engineering made hassle free</div>
+            <div class="sub-header">
+              Veda Sourcing is your one-stop solution for producing materials
+              from all across the world
+            </div>
+
+            <div class="btn">Learn More</div>
+          </div>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+    <!-- <swiper-container
+      ref="swiperRef"
+      :style="{
+        maxWidth: '100vw',
+        height: '100vh',
+      }"
+      :speed="500"
+      :scrollbar="true"
+    ></swiper-container> -->
     <el-carousel :interval="5000" arrow="never" height="600px">
-      <el-carousel-item v-for="(item, index) in heroImageList" :key="index">
+      <!-- <el-carousel-item v-for="(item, index) in heroImageList" :key="index">
         <div class="carousel-item-container">
           <img class="bg-img" :src="item" />
           <div class="content">
@@ -14,7 +58,7 @@
             <div class="btn">Learn More</div>
           </div>
         </div>
-      </el-carousel-item>
+      </el-carousel-item> -->
     </el-carousel>
 
     <div class="about-us-container" ref="aboutUsRef">
@@ -150,6 +194,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ref, onMounted, VNodeRef } from "vue";
 gsap.registerPlugin(ScrollTrigger);
 
+import { Scrollbar } from "swiper/modules";
+import "swiper/css/scrollbar";
+import SwiperCore from "swiper";
+import { SwiperSlide } from "swiper/vue";
+
+SwiperCore.use([Scrollbar]);
+
 const aboutUsRef = ref(null);
 const aboutUsHeaderLeftRef = ref(null);
 const aboutUsHeaderRightRef = ref(null);
@@ -160,9 +211,135 @@ const setAboutUsBlockRefs = (el: any) => {
     aboutUsBlockRefs.push(el);
   }
 };
+const swiperRef = ref();
+const creativeEffect = ref({
+  prev: {
+    // will set `translateZ(-400px)` on previous slides
+    translate: ["0%", 0, 0],
+    origin: "right center",
+  },
+  next: {
+    // will set `translateX(100%)` on next slides
+    translate: ["100%", 0, 0],
+    origin: "right center",
+  },
+});
 
+const swipeAttributeTranslate = (
+  postionsStar: number,
+  postionEnd: number,
+  valueStart: any,
+  valueEnd: any,
+) => {
+  return function (postionNow: number) {
+    if (postionNow <= postionsStar) {
+      return valueStart;
+    }
+    if (postionNow >= postionEnd) {
+      return valueEnd;
+    }
+    return (
+      valueStart +
+      ((valueEnd - valueStart) * (postionNow - postionsStar)) /
+        (postionEnd - postionsStar)
+    );
+  };
+};
 onMounted(() => {
-  console.log(aboutUsBlockRefs);
+  const scaleScope = [100, 150];
+  const scaleImage = swipeAttributeTranslate(
+    0,
+    swiperRef.value.swiper.width,
+    scaleScope[0],
+    scaleScope[1],
+  );
+
+  const reverseScaleImage = swipeAttributeTranslate(
+    0,
+    swiperRef.value.swiper.width,
+    scaleScope[1],
+    scaleScope[0],
+  );
+
+  swiperRef.value.swiper.on("setTranslate", (swiper: any, translateX: any) => {
+    const activeIndex = swiper.activeIndex;
+
+    if (swiper.swipeDirection == "prev") {
+      if (activeIndex > 0) {
+        swiper.slides[activeIndex - 1].style.setProperty(
+          "--backgroundSize",
+          `${scaleImage(
+            Math.abs(
+              Math.abs(swiper.activeIndex * swiper.width) -
+                Math.abs(translateX),
+            ),
+          )}%`,
+        );
+      }
+      swiper.slides[activeIndex].style.setProperty(
+        "--backgroundSize",
+        `${reverseScaleImage(
+          Math.abs(
+            Math.abs(swiper.activeIndex * swiper.width) - Math.abs(translateX),
+          ),
+        )}%`,
+      );
+    } else {
+      if (activeIndex < swiper.slides.length - 1) {
+        swiper.slides[activeIndex + 1].style.setProperty(
+          "--backgroundSize",
+          `${scaleImage(
+            Math.abs(
+              Math.abs(swiper.activeIndex * swiper.width) -
+                Math.abs(translateX),
+            ),
+          )}%`,
+        );
+      }
+      swiper.slides[activeIndex].style.setProperty(
+        "--backgroundSize",
+        `${reverseScaleImage(
+          Math.abs(
+            Math.abs(swiper.activeIndex * swiper.width) - Math.abs(translateX),
+          ),
+        )}%`,
+      );
+    }
+  });
+
+  // swiperRef.value.swiper.on("slideChange", (swiper: any) => {
+  //   const activeIndex = swiper.activeIndex;
+  //   console.log("slideChange");
+
+  //   if (activeIndex == 0) {
+  //     // swiper.allowSlidePrev = false;
+  //     // swiper.allowSlideNext = true;
+  //   } else if (activeIndex == swiper.slides.length - 1) {
+  //     // swiper.allowSlidePrev = true;
+  //     // swiper.allowSlideNext = false;
+  //   } else {
+  //     swiper.allowSlidePrev = true;
+  //     swiper.allowSlideNext = true;
+  //   }
+  // });
+
+  // swiperRef.value.swiper.on("afterInit", (swiper: any) => {
+  //   swiper.allowSlidePrev = false;
+  //   swiper.allowSlideNext = true;
+  //   console.log("reachBeginning");
+  // });
+
+  // swiperRef.value.swiper.on("reachBeginning", (swiper: any) => {
+  //   swiper.allowSlidePrev = false;
+  //   swiper.allowSlideNext = true;
+  //   console.log("reachBeginning");
+  // });
+
+  // swiperRef.value.swiper.on("reachEnd", (swiper: any) => {
+  //   swiper.allowSlidePrev = true;
+  //   swiper.allowSlideNext = false;
+  //   console.log("reachEnd");
+  // });
 
   const aboutUsLeftTimeline = gsap.timeline({
     scrollTrigger: {
@@ -230,7 +407,7 @@ onMounted(() => {
 });
 
 const heroImageList = ref<string[]>([
-  "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecf_nathan-dumlao-pLoMDKtl-JY-unsplash.jpg",
+  "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg",
   "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg",
   "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecf_nathan-dumlao-pLoMDKtl-JY-unsplash.jpg",
   "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg",
@@ -301,68 +478,74 @@ const clientItems = ref([
 <style scoped lang="scss">
 .home-container {
   width: 100%;
+  .swiper-slide-active {
+    z-index: 9 !important;
+  }
+  .swiper-slide-next {
+    z-index: 10 !important;
+  }
 
-  .carousel-item-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
+  .swiper-slide-item {
+    --url: url("https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecf_nathan-dumlao-pLoMDKtl-JY-unsplash.jpg");
+    --backgroundSize: 100%;
+    background-attachment: fixed;
+    background-image: var(--url);
+    background-clip: content-box;
+    background-size: var(--backgroundSize);
+    background-repeat: no-repeat;
+    background-position: center center;
 
-    background-size: auto, cover;
-    background-position: 0 0, 50%;
-
-    background-image: linear-gradient(360deg, #222, rgba(34, 34, 34, 0));
-
-    .bg-img {
-      position: absolute;
+    .carousel-item-container {
       width: 100%;
       height: 100%;
-      z-index: -1;
-      object-fit: cover;
-    }
-    .content {
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-      height: 100%;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-    }
-    .header {
-      width: 50%;
-      color: #f9f9f9;
-      font-size: 62px;
-      line-height: 1.2;
-      font-weight: 600;
-    }
-    .sub-header {
-      width: 35%;
-      color: #f9f9f9;
-      margin-bottom: 25px;
-      font-size: 18px;
-      margin-top: 20px;
-      line-height: 1.5;
-    }
 
-    .btn {
-      border: 1px solid #eb5757;
-      border-radius: 5px;
-      padding: 10px 25px;
-      font-weight: 700;
-      transition: border-color 0.3s, background-color 0.3s, color 0.3s;
-      cursor: pointer;
-      display: inline-block;
-      box-sizing: border-box;
-      background-color: transparent;
-      color: #fff;
-      text-align: center;
-      border: 1px solid #fff;
+      // linear-gradient(360deg, #222, rgba(34, 34, 34, 0))
 
-      &:hover {
-        background-color: #fff;
-        color: #111;
+      .content {
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+      }
+      .header {
+        width: 50%;
+        color: #f9f9f9;
+        font-size: 62px;
+        line-height: 1.2;
+        font-weight: 600;
+      }
+      .sub-header {
+        width: 35%;
+        color: #f9f9f9;
+        margin-bottom: 25px;
+        font-size: 18px;
+        margin-top: 20px;
+        line-height: 1.5;
+      }
+
+      .btn {
+        border: 1px solid #eb5757;
+        border-radius: 5px;
+        padding: 10px 25px;
+        font-weight: 700;
+        transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+        cursor: pointer;
+        display: inline-block;
+        box-sizing: border-box;
+        background-color: transparent;
+        color: #fff;
+        text-align: center;
+        border: 1px solid #fff;
+
+        &:hover {
+          background-color: #fff;
+          color: #111;
+        }
       }
     }
   }
