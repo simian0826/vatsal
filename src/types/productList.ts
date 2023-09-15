@@ -6,12 +6,7 @@ export type ProductListItem = {
   image: string;
 };
 
-export type CategoryTypeValue =
-  | "tile"
-  | "stone"
-  | "woodDoor"
-  | "plumbing"
-  | "light";
+export type CategoryTypeValue = "tile" | "stone" | "woodDoor" | "plumbing" | "light";
 
 export type CategoryListItem = {
   name: string;

@@ -6,9 +6,7 @@ import { ref } from "vue";
 
 const useUserStore = defineStore("userStore", () => {
   const user = ref(null);
-  const userLogin = (
-    param: UserLoginParam,
-  ): Promise<HttpData<UserLoginResult>> => {
+  const userLogin = (param: UserLoginParam): Promise<HttpData<UserLoginResult>> => {
     return login(param);
   };
   return {

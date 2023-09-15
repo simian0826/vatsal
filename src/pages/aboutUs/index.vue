@@ -7,9 +7,7 @@
       <div class="why-section">
         <div class="introductory-paragraph">Why veda sourcing?</div>
         <div class="why-header">We’re here to add value to your projects</div>
-        <div class="why-description">
-          We strive to source materials never before seen in your local market, at prices you would've never imagined.
-        </div>
+        <div class="why-description">We strive to source materials never before seen in your local market, at prices you would've never imagined.</div>
       </div>
 
       <div class="quality-section">
@@ -76,14 +74,12 @@ const members = ref([
   {
     url: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeedd_John%20Doe.png",
     name: "Vatsal Shah",
-    desc:
-      "Vatsal comes from a family with six decades of experience running a construction and real estate development powerhouse in India. He spearheads their firm's US division with a goal to match the Indian division's scale in just five short years. Through his involvement in this sector, he has intricate knowledge of the design, quality and value of materials used in construction.",
+    desc: "Vatsal comes from a family with six decades of experience running a construction and real estate development powerhouse in India. He spearheads their firm's US division with a goal to match the Indian division's scale in just five short years. Through his involvement in this sector, he has intricate knowledge of the design, quality and value of materials used in construction.",
   },
   {
     url: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeede_Jane%20Doe.png",
     name: "Anil Agrawal",
-    desc:
-      "Anil has a multi-faceted background in industries such as garment manufacturing and restaurants. Having run businesses across multiple countries, he has the expertise in finding the right manufacturers, ensuring quality control and managing logistical issues.",
+    desc: "Anil has a multi-faceted background in industries such as garment manufacturing and restaurants. Having run businesses across multiple countries, he has the expertise in finding the right manufacturers, ensuring quality control and managing logistical issues.",
   },
 ]);
 </script>

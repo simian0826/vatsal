@@ -31,14 +31,8 @@ class HttpRequest {
   }
 
   setupInterceptor(): void {
-    this.instance.interceptors.request.use(
-      this.config.interceptorHooks?.requestInterceptor,
-      this.config.interceptorHooks?.requestInterceptorCatch,
-    );
-    this.instance.interceptors.response.use(
-      this.config.interceptorHooks?.responseInterceptor,
-      this.config.interceptorHooks?.resonpenseInterceptorCatch,
-    );
+    this.instance.interceptors.request.use(this.config.interceptorHooks?.requestInterceptor, this.config.interceptorHooks?.requestInterceptorCatch);
+    this.instance.interceptors.response.use(this.config.interceptorHooks?.responseInterceptor, this.config.interceptorHooks?.resonpenseInterceptorCatch);
     this.instance.interceptors.request.use((config) => {
       console.log("set request intercept");
       if (this.showLoading) {

@@ -1,23 +1,16 @@
 <template>
   <div class="project-container">
     <div class="hero-container">
-      <img
-        class="hero-image"
-        src="https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-1.jpg"
-      />
+      <img class="hero-image" src="https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-1.jpg" />
     </div>
 
     <div class="introduction-container">
       <div class="sub-title">MIXED-USE</div>
       <div class="title">MIAMI BEACH COLIVING</div>
       <div class="description">
-        This project features coliving, coworking, and an extended-stay hotel
-        component alongside welln, nextTickess amenities and a robust food and
-        beverage program, open to the neighborhood and community. The project
-        will offer 10,319 SF of leasable workspace and combined 125 living
-        spaces across hotel rooms and co-living residences. The ground floor
-        will house F&B options including grab and go snacks/meals and a bar
-        offering entertainment to guests and residents.
+        This project features coliving, coworking, and an extended-stay hotel component alongside welln, nextTickess amenities and a robust food and beverage program, open to the neighborhood and
+        community. The project will offer 10,319 SF of leasable workspace and combined 125 living spaces across hotel rooms and co-living residences. The ground floor will house F&B options including
+        grab and go snacks/meals and a bar offering entertainment to guests and residents.
       </div>
     </div>
 
@@ -77,10 +70,7 @@
       >
         <div class="header">Project Images</div>
       </el-divider>
-      <img
-        class="image"
-        src="https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-2.jpg"
-      />
+      <img class="image" src="https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-2.jpg" />
       <!-- <el-row :gutter="20" style="height: 100%;">
         <el-col :span="12"><img src="https://miclglobal.com/wp-content/uploads/2022/08/collage.jpg"/></el-col>
         <el-col :span="12">
@@ -225,8 +215,7 @@ const materials = ref([
     price: "subtitle",
     title: "TRANSPORT & DELIVERY",
     image: "./assets/5.jpg",
-    description:
-      "From the manufacturer's warehouse to your project site, we work with freight providers to ensure that your goods will arrive right on schedule.",
+    description: "From the manufacturer's warehouse to your project site, we work with freight providers to ensure that your goods will arrive right on schedule.",
   },
 ]);
 

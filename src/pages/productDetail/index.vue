@@ -1,20 +1,14 @@
 <template>
   <div class="project-container">
     <div class="hero-container">
-      <img
-        class="hero-image"
-        src="https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-1.jpg"
-      />
+      <img class="hero-image" src="https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-1.jpg" />
     </div>
 
     <div class="main-info-container">
       <div class="main-block">
         <el-row :gutter="80">
           <el-col :span="12">
-            <img
-              class="main-img"
-              src="https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-1.jpg"
-            />
+            <img class="main-img" src="https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-1.jpg" />
           </el-col>
           <el-col :span="12">
             <div class="category-block">category</div>
@@ -24,24 +18,17 @@
             <div class="description-container">
               <p>
                 <span class="highlight">Lithic</span>
-                revisits the innate beauty of the natural stone according to
-                Nexion designerstyle which opens the boundaries to new technical
-                features with the revolutionary
+                revisits the innate beauty of the natural stone according to Nexion designerstyle which opens the boundaries to new technical features with the revolutionary
                 <span class="highlight">Matte Silk</span>
                 finishing.
               </p>
-              <p>
-                This collection emulates the vivid and realistic shades of
-                natural stone andharmonize the graphics of nature by
-                representing it in sintered stone
-              </p>
+              <p>This collection emulates the vivid and realistic shades of natural stone andharmonize the graphics of nature by representing it in sintered stone</p>
               <p>
                 Lithic comes in four colours:
                 <span class="highlight">Roccia Portoghese</span>
                 . inspired by the beige limestone.
                 <span class="highlight">Vicenza Beige</span>
-                , the classic pale sedimentary stone, Basalto Grigio, the dark
-                volcanicock. and
+                , the classic pale sedimentary stone, Basalto Grigio, the dark volcanicock. and
                 <span class="highlight">Gabbro Sfumato</span>
                 , gray with muted tones
               </p>
@@ -89,25 +76,13 @@
             <div class="sub-text">Matte Silk</div>
           </el-col>
           <el-col :span="17" class="right-container color-container">
-            <div
-              class="color-item-container"
-              :key="index"
-              v-for="(item, index) in colors"
-            >
+            <div class="color-item-container" :key="index" v-for="(item, index) in colors">
               <el-popover placement="top" :width="400" trigger="hover">
                 <template #reference>
-                  <div
-                    v-if="item.type === 'color'"
-                    class="color-block"
-                    :style="{ background: item.value }"
-                  ></div>
+                  <div v-if="item.type === 'color'" class="color-block" :style="{ background: item.value }"></div>
                   <img v-else class="color-image" :src="item.value" />
                 </template>
-                <div
-                  v-if="item.type === 'color'"
-                  class="pop-color-block"
-                  :style="{ background: item.value }"
-                ></div>
+                <div v-if="item.type === 'color'" class="pop-color-block" :style="{ background: item.value }"></div>
                 <img v-else class="pop-color-image" :src="item.value" />
               </el-popover>
               <div class="color-name">{{ item.name }}</div>
@@ -127,11 +102,7 @@
             <div class="sub-text">Matte Silk</div>
           </el-col>
           <el-col :span="17" class="right-container thickness-container">
-            <div
-              class="thickness-item-container"
-              :key="index"
-              v-for="(item, index) in thicknesses"
-            >
+            <div class="thickness-item-container" :key="index" v-for="(item, index) in thicknesses">
               {{ item.name }}
             </div>
           </el-col>
@@ -149,11 +120,7 @@
             <div class="sub-text">Matte Silk</div>
           </el-col>
           <el-col :span="17" class="right-container site-container">
-            <div
-              class="site-item-container"
-              :key="index"
-              v-for="(item, index) in sites"
-            >
+            <div class="site-item-container" :key="index" v-for="(item, index) in sites">
               {{ item.name }}
             </div>
           </el-col>
@@ -241,8 +208,7 @@ const materials = ref([
     price: "subtitle",
     title: "TRANSPORT & DELIVERY",
     image: "./assets/5.jpg",
-    description:
-      "From the manufacturer's warehouse to your project site, we work with freight providers to ensure that your goods will arrive right on schedule.",
+    description: "From the manufacturer's warehouse to your project site, we work with freight providers to ensure that your goods will arrive right on schedule.",
   },
 ]);
 type ColorObj = {

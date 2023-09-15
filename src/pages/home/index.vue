@@ -25,10 +25,7 @@
         <div class="carousel-item-container">
           <div class="content">
             <div class="header">Value engineering made hassle free</div>
-            <div class="sub-header">
-              Veda Sourcing is your one-stop solution for producing materials
-              from all across the world
-            </div>
+            <div class="sub-header">Veda Sourcing is your one-stop solution for producing materials from all across the world</div>
 
             <div class="btn">Learn More</div>
           </div>
@@ -67,18 +64,10 @@
           <div class="sub-title">WHAT WE DO</div>
           <div class="title">Our Process</div>
         </div>
-        <div class="right-content" ref="aboutUsHeaderRightRef">
-          We are focused on providing our clients with quality goods from hard
-          to reach places at competitive prices
-        </div>
+        <div class="right-content" ref="aboutUsHeaderRightRef">We are focused on providing our clients with quality goods from hard to reach places at competitive prices</div>
       </div>
       <div class="content">
-        <div
-          class="block-container"
-          :key="item.number"
-          v-for="item in introductionItems"
-          :ref="setAboutUsBlockRefs"
-        >
+        <div class="block-container" :key="item.number" v-for="item in introductionItems" :ref="setAboutUsBlockRefs">
           <div class="block">
             <div class="number">{{ item.number }}</div>
             <div class="title">{{ item.title }}</div>
@@ -111,10 +100,7 @@
         <el-row>
           <el-col :span="12">
             <div class="product-left-container">
-              <img
-                src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg"
-                class="main-img"
-              />
+              <img src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg" class="main-img" />
               <img
                 v-show="isShowDetailImage"
                 class="detail-img"
@@ -128,27 +114,16 @@
                   @mouseenter="productTinyImageMouseEnterHandler"
                   @mouseleave="productTinyImageMouseLeaveHandler"
                 />
-                <img
-                  class="tiny-img"
-                  src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg"
-                />
-                <img
-                  class="tiny-img"
-                  src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg"
-                />
+                <img class="tiny-img" src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg" />
+                <img class="tiny-img" src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg" />
               </div>
             </div>
           </el-col>
           <el-col :span="12">
             <div class="product-right-container">
               <div class="header-container">
-                <div class="product-header">
-                  We provide products for your unique needs
-                </div>
-                <div class="product-sub-header">
-                  Create the ideal packaging for any product, stand out from
-                  competitors and connect with customer values.
-                </div>
+                <div class="product-header">We provide products for your unique needs</div>
+                <div class="product-sub-header">Create the ideal packaging for any product, stand out from competitors and connect with customer values.</div>
               </div>
 
               <div class="property-container">
@@ -172,11 +147,7 @@
         <div class="right-content"></div>
       </div>
       <div class="content">
-        <div
-          class="block-container"
-          :key="item.number"
-          v-for="item in clientItems"
-        >
+        <div class="block-container" :key="item.number" v-for="item in clientItems">
           <div class="block">
             <div class="number">{{ item.number }}</div>
             <div class="title">{{ item.title }}</div>
@@ -225,12 +196,7 @@ const creativeEffect = ref({
   },
 });
 
-const swipeAttributeTranslate = (
-  postionsStar: number,
-  postionEnd: number,
-  valueStart: any,
-  valueEnd: any,
-) => {
+const swipeAttributeTranslate = (postionsStar: number, postionEnd: number, valueStart: any, valueEnd: any) => {
   return function (postionNow: number) {
     if (postionNow <= postionsStar) {
       return valueStart;
@@ -238,72 +204,28 @@ const swipeAttributeTranslate = (
     if (postionNow >= postionEnd) {
       return valueEnd;
     }
-    return (
-      valueStart +
-      ((valueEnd - valueStart) * (postionNow - postionsStar)) /
-        (postionEnd - postionsStar)
-    );
+    return valueStart + ((valueEnd - valueStart) * (postionNow - postionsStar)) / (postionEnd - postionsStar);
   };
 };
 onMounted(() => {
   const scaleScope = [100, 150];
-  const scaleImage = swipeAttributeTranslate(
-    0,
-    swiperRef.value.swiper.width,
-    scaleScope[0],
-    scaleScope[1],
-  );
+  const scaleImage = swipeAttributeTranslate(0, swiperRef.value.swiper.width, scaleScope[0], scaleScope[1]);
 
-  const reverseScaleImage = swipeAttributeTranslate(
-    0,
-    swiperRef.value.swiper.width,
-    scaleScope[1],
-    scaleScope[0],
-  );
+  const reverseScaleImage = swipeAttributeTranslate(0, swiperRef.value.swiper.width, scaleScope[1], scaleScope[0]);
 
   swiperRef.value.swiper.on("setTranslate", (swiper: any, translateX: any) => {
     const activeIndex = swiper.activeIndex;
 
     if (swiper.swipeDirection == "prev") {
       if (activeIndex > 0) {
-        swiper.slides[activeIndex - 1].style.setProperty(
-          "--backgroundSize",
-          `${scaleImage(
-            Math.abs(
-              Math.abs(swiper.activeIndex * swiper.width) -
-                Math.abs(translateX),
-            ),
-          )}%`,
-        );
+        swiper.slides[activeIndex - 1].style.setProperty("--backgroundSize", `${scaleImage(Math.abs(Math.abs(swiper.activeIndex * swiper.width) - Math.abs(translateX)))}%`);
       }
-      swiper.slides[activeIndex].style.setProperty(
-        "--backgroundSize",
-        `${reverseScaleImage(
-          Math.abs(
-            Math.abs(swiper.activeIndex * swiper.width) - Math.abs(translateX),
-          ),
-        )}%`,
-      );
+      swiper.slides[activeIndex].style.setProperty("--backgroundSize", `${reverseScaleImage(Math.abs(Math.abs(swiper.activeIndex * swiper.width) - Math.abs(translateX)))}%`);
     } else {
       if (activeIndex < swiper.slides.length - 1) {
-        swiper.slides[activeIndex + 1].style.setProperty(
-          "--backgroundSize",
-          `${scaleImage(
-            Math.abs(
-              Math.abs(swiper.activeIndex * swiper.width) -
-                Math.abs(translateX),
-            ),
-          )}%`,
-        );
+        swiper.slides[activeIndex + 1].style.setProperty("--backgroundSize", `${scaleImage(Math.abs(Math.abs(swiper.activeIndex * swiper.width) - Math.abs(translateX)))}%`);
       }
-      swiper.slides[activeIndex].style.setProperty(
-        "--backgroundSize",
-        `${reverseScaleImage(
-          Math.abs(
-            Math.abs(swiper.activeIndex * swiper.width) - Math.abs(translateX),
-          ),
-        )}%`,
-      );
+      swiper.slides[activeIndex].style.setProperty("--backgroundSize", `${reverseScaleImage(Math.abs(Math.abs(swiper.activeIndex * swiper.width) - Math.abs(translateX)))}%`);
     }
   });
 
@@ -416,26 +338,21 @@ const introductionItems = ref([
   {
     number: "01",
     title: "PRODUCT SELECTION",
-    image:
-      "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeebc_Circle.svg",
-    detaiText:
-      "Our team is constantly scouring the globe to find new materials and inspiration. We work directly with manufacturers to secure the best rates for our customers.",
+    image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeebc_Circle.svg",
+    detaiText: "Our team is constantly scouring the globe to find new materials and inspiration. We work directly with manufacturers to secure the best rates for our customers.",
   },
   {
     number: "02",
     title: "QUALITY CONTROL",
-    image:
-      "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeebf_Triangle.svg",
+    image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeebf_Triangle.svg",
     detaiText:
       "Oversight at very level of the manufacturing and packaging process helps us maintain the highest standards of quality. All of our products are vigorously tested and certified by the appropriate authorities.",
   },
   {
     number: "03",
     title: "TRANSPORT & DELIVERY",
-    image:
-      "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeec0_Rectangle.svg",
-    detaiText:
-      "From the manufacturer's warehouse to your project site, we work with freight providers to ensure that your goods will arrive right on schedule.",
+    image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeec0_Rectangle.svg",
+    detaiText: "From the manufacturer's warehouse to your project site, we work with freight providers to ensure that your goods will arrive right on schedule.",
   },
 ]);
 
@@ -451,20 +368,17 @@ const clientItems = ref([
   {
     number: "01",
     title: "MICL",
-    image:
-      "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeebc_Circle.svg",
+    image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeebc_Circle.svg",
   },
   {
     number: "02",
     title: "FORTH \n DEVELOPMENT",
-    image:
-      "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeebf_Triangle.svg",
+    image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeebf_Triangle.svg",
   },
   {
     number: "03",
     title: "BOMBAY \n DARBAR",
-    image:
-      "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeec0_Rectangle.svg",
+    image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeec0_Rectangle.svg",
   },
 ]);
 

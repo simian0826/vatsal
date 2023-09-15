@@ -14,10 +14,7 @@ export default [
     url: "/api/user/login",
     type: "post",
     response: ({ body }) => {
-      const checkUser = getUserList().find(
-        (item) =>
-          item.username === body.username && item.password === body.password,
-      );
+      const checkUser = getUserList().find((item) => item.username === body.username && item.password === body.password);
       if (!checkUser) {
         return { code: 201, message: `账号或密码不正确`, data: null };
       }

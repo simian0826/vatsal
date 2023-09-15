@@ -1,10 +1,7 @@
 <template>
   <div class="project-list-container">
     <div class="hero-container">
-      <img
-        class="hero-image"
-        src="https://miclglobal.com/wp-content/uploads/2022/08/Shipping-Avenue-Townhomes-1.jpg"
-      />
+      <img class="hero-image" src="https://miclglobal.com/wp-content/uploads/2022/08/Shipping-Avenue-Townhomes-1.jpg" />
     </div>
     <div class="content-container">
       <el-row>
@@ -23,12 +20,7 @@
           </div>
         </el-col>
         <el-col :span="16" class="list-container">
-          <div
-            @click="router.push({ path: `/productDetail/${item.id}` })"
-            v-for="(item, index) in presentItemList"
-            :key="index"
-            class="commodity-item-container"
-          >
+          <div @click="router.push({ path: `/productDetail/${item.id}` })" v-for="(item, index) in presentItemList" :key="index" class="commodity-item-container">
             <img class="commodity-image" :src="item.img" />
             <div class="text-area">
               <div class="commodity-type">{{ item.type }}</div>
@@ -62,19 +54,15 @@ const changeCategoryHandler = (category: CategoryTypeValue) => {
   presentItemList.value = categoryItemGroup.value[category];
 };
 
-const routeProductType = computed(
-  () => router.currentRoute.value.query.productType,
-);
+const routeProductType = computed(() => router.currentRoute.value.query.productType);
 watch(routeProductType, () => {
-  selectedCategory.value = router.currentRoute.value.query
-    .productType as CategoryTypeValue;
+  selectedCategory.value = router.currentRoute.value.query.productType as CategoryTypeValue;
   presentItemList.value = categoryItemGroup.value[selectedCategory.value];
 });
 
 onMounted(() => {
   if (router.currentRoute.value.query.productType) {
-    selectedCategory.value = router.currentRoute.value.query
-      .productType as CategoryTypeValue;
+    selectedCategory.value = router.currentRoute.value.query.productType as CategoryTypeValue;
   } else {
     const keys = Object.keys(categoryItemGroup.value) as CategoryTypeValue[];
     selectedCategory.value = keys[0];

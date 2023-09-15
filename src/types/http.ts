@@ -1,14 +1,8 @@
-import {
-  AxiosResponse,
-  RawAxiosRequestConfig,
-  InternalAxiosRequestConfig,
-} from "axios";
+import { AxiosResponse, RawAxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
 
 //拦截器接口
 export interface InterceptorHooks {
-  requestInterceptor?: (
-    config: InternalAxiosRequestConfig,
-  ) => InternalAxiosRequestConfig;
+  requestInterceptor?: (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig;
   requestInterceptorCatch?: (error: any) => any;
   responseInterceptor?: (response: AxiosResponse) => AxiosResponse;
   resonpenseInterceptorCatch?: (error: any) => any;

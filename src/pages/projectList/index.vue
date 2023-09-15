@@ -8,12 +8,7 @@
       <div class="header">ONGOING PROJECTS</div>
 
       <div class="list-content">
-        <div
-          class="block-container"
-          :key="index"
-          v-for="(item, index) in onGoingProjects"
-          @click="router.push({ path: `/projectDetail/${item.id}` })"
-        >
+        <div class="block-container" :key="index" v-for="(item, index) in onGoingProjects" @click="router.push({ path: `/projectDetail/${item.id}` })">
           <div class="block">
             <img class="bg-image" :src="item.image" />
             <div class="mask-container">
@@ -41,12 +36,7 @@
       <div class="header">COMPLETED PROJECTS</div>
 
       <div class="list-content">
-        <div
-          class="block-container"
-          :key="index"
-          v-for="(item, index) in completedProjects"
-          @click="router.push({ path: '/projectDetail' })"
-        >
+        <div class="block-container" :key="index" v-for="(item, index) in completedProjects" @click="router.push({ path: '/projectDetail' })">
           <div class="block">
             <img class="bg-image" :src="item.image" />
             <div class="mask-container">
@@ -82,9 +72,7 @@ const router = useRouter();
 const heroImgUrl = ref<string>(projectListData.heroImgUrl);
 const onGoingProjects = ref<ProjectListItem[]>(projectListData.ongoingProjects);
 
-const completedProjects = ref<ProjectListItem[]>(
-  projectListData.completedProjects,
-);
+const completedProjects = ref<ProjectListItem[]>(projectListData.completedProjects);
 
 // const productList = ref([
 //   {

@@ -16,9 +16,7 @@ const loginParams = ref<UserLoginParam>({
 });
 const userStore = useUserStore();
 const handleLogin = async () => {
-  const result: HttpData<UserLoginResult> = await userStore.userLogin(
-    loginParams.value,
-  );
+  const result: HttpData<UserLoginResult> = await userStore.userLogin(loginParams.value);
   console.log(userStore.user);
 
   console.log(result);

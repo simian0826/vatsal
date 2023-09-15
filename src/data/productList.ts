@@ -6,8 +6,7 @@ const productListData: {
   categoryItemGroup: CategoryItemGroupObject;
 } = {
   //首评大图
-  heroImgUrl:
-    "https://miclglobal.com/wp-content/uploads/2022/08/Shipping-Avenue-Townhomes-1.jpg",
+  heroImgUrl: "https://miclglobal.com/wp-content/uploads/2022/08/Shipping-Avenue-Townhomes-1.jpg",
   //左侧分类
   categoryList: [
     {
