@@ -60,14 +60,20 @@ watch(routeProductType, () => {
   presentItemList.value = categoryItemGroup.value[selectedCategory.value];
 });
 
-onMounted(() => {
-  if (router.currentRoute.value.query.productType) {
-    selectedCategory.value = router.currentRoute.value.query.productType as CategoryTypeValue;
+const urlProductTypeChangeHandler = () => {
+  if (router.currentRoute.value.query.type) {
+    selectedCategory.value = router.currentRoute.value.query.type as CategoryTypeValue;
   } else {
     const keys = Object.keys(categoryItemGroup.value) as CategoryTypeValue[];
     selectedCategory.value = keys[0];
   }
   presentItemList.value = categoryItemGroup.value[selectedCategory.value];
+};
+watch(router.currentRoute, () => {
+  urlProductTypeChangeHandler();
+});
+onMounted(() => {
+  urlProductTypeChangeHandler();
 });
 </script>
 

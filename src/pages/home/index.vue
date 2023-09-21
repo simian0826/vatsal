@@ -4,8 +4,9 @@
       ref="swiperRef"
       :style="{
         maxWidth: '100vw',
-        height: '100vh',
         overflow: 'hidden',
+        // 'aspect-ratio': '1920/1080',
+        height: '800px',
       }"
       :threshold="1"
       :touchRatio="2.5"
@@ -23,11 +24,11 @@
         }"
       >
         <div class="carousel-item-container">
-          <div class="content">
-            <div class="header">Value engineering made hassle free</div>
-            <div class="sub-header">Veda Sourcing is your one-stop solution for producing materials from all across the world</div>
-
-            <div class="btn">Learn More</div>
+          <div class="content-container">
+            <div class="content-block">
+              <div class="header">Value engineering made hassle free</div>
+              <div class="sub-header">Veda Sourcing is your one-stop solution for producing materials from all across the world</div>
+            </div>
           </div>
         </div>
       </swiper-slide>
@@ -41,39 +42,73 @@
       :speed="500"
       :scrollbar="true"
     ></swiper-container> -->
-    <el-carousel :interval="5000" arrow="never" height="600px">
-      <!-- <el-carousel-item v-for="(item, index) in heroImageList" :key="index">
-        <div class="carousel-item-container">
-          <img class="bg-img" :src="item" />
-          <div class="content">
-            <div class="header">Value engineering made hassle free</div>
-            <div class="sub-header">
-              Veda Sourcing is your one-stop solution for producing materials
-              from all across the world
-            </div>
 
-            <div class="btn">Learn More</div>
-          </div>
-        </div>
-      </el-carousel-item> -->
-    </el-carousel>
-
-    <div class="about-us-container" ref="aboutUsRef">
+    <div class="about-us-container">
       <div class="header">
-        <div class="left-content" ref="aboutUsHeaderLeftRef">
+        <div class="left-content">
           <div class="sub-title">WHAT WE DO</div>
           <div class="title">Our Process</div>
         </div>
         <div class="right-content" ref="aboutUsHeaderRightRef">We are focused on providing our clients with quality goods from hard to reach places at competitive prices</div>
       </div>
       <div class="content">
-        <div class="block-container" :key="item.number" v-for="item in introductionItems" :ref="setAboutUsBlockRefs">
+        <div
+          class="block-container"
+          :key="index"
+          v-for="(item, index) in introductionItems"
+          :style="{
+            'background-image': `url('${item.image}')`,
+          }"
+        >
           <div class="block">
-            <div class="number">{{ item.number }}</div>
             <div class="title">{{ item.title }}</div>
-            <img :src="item.image" class="bg-image" />
+            <div class="double-quote">“</div>
           </div>
           <div class="detail-text">{{ item.detaiText }}</div>
+        </div>
+      </div>
+
+      <div class="content process-swiper-container">
+        <div class="left-arrow-container" @click="swiperPrevious">
+          <el-icon color="#666" size="60">
+            <ArrowLeft />
+          </el-icon>
+        </div>
+        <swiper-container
+          ref="productSwiperRef"
+          :style="{
+            flex: 1,
+            'max-width': '100%',
+            height: 'auto',
+          }"
+          :space-between="20"
+          :speed="500"
+        >
+          <swiper-slide v-for="(item, index) in processItems" :key="index">
+            <el-row :gutter="40">
+              <el-col :span="12">
+                <div class="process-header">{{ item.title }}</div>
+                <div class="process-subheader">{{ item.subTitle }}</div>
+                <div class="process-description">
+                  {{ item.description }}
+                </div>
+                <div class="value-container">
+                  <div class="left">{{ item.percentage }}%</div>
+                  <div class="right">{{ item.amount }}+</div>
+                </div>
+                <div class="about-me-btn">More about me</div>
+              </el-col>
+              <el-col :span="12" style="position: relative;">
+                <img :src="item.image" class="process-img" />
+                <div class="zoom-in" @click="showImage(item.image)">
+                  <el-icon color="#fff" size="26"><ZoomIn /></el-icon>
+                </div>
+              </el-col>
+            </el-row>
+          </swiper-slide>
+        </swiper-container>
+        <div class="right-arrow-container" @click="swiperNext">
+          <el-icon color="#666" size="60"><ArrowRight /></el-icon>
         </div>
       </div>
     </div>
@@ -85,56 +120,20 @@
           <div class="title">Our Products</div>
         </div>
         <div class="right-content"></div>
+        <div class="header-description">We are focused on providing our clients with quality goods from hard to reachplaces at competitive prices</div>
       </div>
-      <div class="content">
-        <!-- <div
-          class="product-item-container"
-          :key="item.title"
-          v-for="item in products"
-        >
-          <img :src="item.image" class="image" />
-          <div class="title">{{ item.title }}</div>
-          <div class="price">{{ `Starting from $${item.price}/sqft` }}</div>
-          <div class="btn">Details</div>
-        </div> -->
-        <el-row>
-          <el-col :span="12">
-            <div class="product-left-container">
-              <img src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg" class="main-img" />
-              <img
-                v-show="isShowDetailImage"
-                class="detail-img"
-                src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg"
-                :style="{ opacity: isShowDetailImage ? 1 : 0 }"
-              />
-              <div class="list-img-container">
-                <img
-                  class="tiny-img"
-                  src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg"
-                  @mouseenter="productTinyImageMouseEnterHandler"
-                  @mouseleave="productTinyImageMouseLeaveHandler"
-                />
-                <img class="tiny-img" src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg" />
-                <img class="tiny-img" src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg" />
-              </div>
-            </div>
-          </el-col>
-          <el-col :span="12">
-            <div class="product-right-container">
-              <div class="header-container">
-                <div class="product-header">We provide products for your unique needs</div>
-                <div class="product-sub-header">Create the ideal packaging for any product, stand out from competitors and connect with customer values.</div>
-              </div>
 
-              <div class="property-container">
-                <div class="property-item">Size</div>
-                <div class="property-item">Material</div>
-                <div class="property-item">Colors</div>
-                <div class="property-item">Features</div>
-              </div>
-            </div>
-          </el-col>
-        </el-row>
+      <div class="product-grid-container">
+        <div
+          class="product-item"
+          :key="index"
+          v-for="(item, index) in productItems"
+          :style="{
+            'background-image': `url('${item.image}')`,
+          }"
+        >
+          <div class="product-title">{{ item.title }}</div>
+        </div>
       </div>
     </div>
 
@@ -147,22 +146,35 @@
         <div class="right-content"></div>
       </div>
       <div class="content">
-        <div class="block-container" :key="item.number" v-for="item in clientItems">
-          <div class="block">
-            <div class="number">{{ item.number }}</div>
-            <div class="title">{{ item.title }}</div>
-            <img :src="item.image" class="bg-image" />
+        <div class="logo-container">
+          <img :key="index" v-for="(item, index) in clientItems" :src="item" />
+        </div>
+      </div>
+    </div>
+    <div class="leadership-container">
+      <div class="content">
+        <div class="header">leadership</div>
+        <div class="leader-container">
+          <div class="leader-block" :key="index" v-for="(item, index) in leaders">
+            <div class="leader-name" :style="{ textAlign: index === 1 ? 'right' : 'left' }">{{ item.name }}</div>
+            <div class="leader-description">{{ item.description }}</div>
+            <img v-if="item.image" class="leader-image" :src="item.image" />
           </div>
         </div>
       </div>
     </div>
+
+    <el-dialog :show-close="false" lock-scroll v-model="detailImageVisible" width="70%">
+      <img style="width: 100%;" :src="detailImage" />
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
+import homeData from "@/data/home";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ref, onMounted, VNodeRef } from "vue";
+import { ref, onMounted } from "vue";
 gsap.registerPlugin(ScrollTrigger);
 
 import { Scrollbar } from "swiper/modules";
@@ -172,16 +184,6 @@ import { SwiperSlide } from "swiper/vue";
 
 SwiperCore.use([Scrollbar]);
 
-const aboutUsRef = ref(null);
-const aboutUsHeaderLeftRef = ref(null);
-const aboutUsHeaderRightRef = ref(null);
-
-const aboutUsBlockRefs: VNodeRef[] = [];
-const setAboutUsBlockRefs = (el: any) => {
-  if (el) {
-    aboutUsBlockRefs.push(el);
-  }
-};
 const swiperRef = ref();
 const creativeEffect = ref({
   prev: {
@@ -207,6 +209,16 @@ const swipeAttributeTranslate = (postionsStar: number, postionEnd: number, value
     return valueStart + ((valueEnd - valueStart) * (postionNow - postionsStar)) / (postionEnd - postionsStar);
   };
 };
+
+const productSwiperRef = ref();
+
+const swiperNext = () => {
+  productSwiperRef.value.swiper.slideNext();
+};
+const swiperPrevious = () => {
+  productSwiperRef.value.swiper.slidePrev();
+};
+
 onMounted(() => {
   const scaleScope = [100, 150];
   const scaleImage = swipeAttributeTranslate(0, swiperRef.value.swiper.width, scaleScope[0], scaleScope[1]);
@@ -262,70 +274,6 @@ onMounted(() => {
   //   swiper.allowSlideNext = false;
   //   console.log("reachEnd");
   // });
-
-  const aboutUsLeftTimeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: aboutUsRef.value,
-      scrub: 0,
-      start: "top 80%",
-      end: "bottom 120%",
-    },
-  });
-  const aboutUsRightTimeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: aboutUsRef.value,
-      scrub: 1,
-      start: "top 70%",
-      end: "bottom 110%",
-    },
-  });
-  const aboutUsBlockTimeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: aboutUsRef.value,
-      scrub: 1,
-      start: "top 60%",
-      end: "bottom 120%",
-    },
-  });
-
-  aboutUsBlockRefs.forEach((item, index) => {
-    aboutUsBlockTimeline.fromTo(
-      item,
-      {
-        opacity: 0,
-        translateY: index % 2 == 0 ? 40 : -40,
-      },
-      {
-        translateY: 0,
-
-        opacity: 1,
-      },
-    );
-  });
-
-  aboutUsLeftTimeline.fromTo(
-    aboutUsHeaderLeftRef.value,
-    {
-      opacity: 0,
-      translateX: -50,
-    },
-    {
-      translateX: 0,
-
-      opacity: 1,
-    },
-  );
-  aboutUsRightTimeline.fromTo(
-    aboutUsHeaderRightRef.value,
-    {
-      opacity: 0,
-      translateX: 50,
-    },
-    {
-      translateX: 0,
-      opacity: 1,
-    },
-  );
 });
 
 const heroImageList = ref<string[]>([
@@ -334,59 +282,22 @@ const heroImageList = ref<string[]>([
   "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecf_nathan-dumlao-pLoMDKtl-JY-unsplash.jpg",
   "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg",
 ]);
-const introductionItems = ref([
-  {
-    number: "01",
-    title: "PRODUCT SELECTION",
-    image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeebc_Circle.svg",
-    detaiText: "Our team is constantly scouring the globe to find new materials and inspiration. We work directly with manufacturers to secure the best rates for our customers.",
-  },
-  {
-    number: "02",
-    title: "QUALITY CONTROL",
-    image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeebf_Triangle.svg",
-    detaiText:
-      "Oversight at very level of the manufacturing and packaging process helps us maintain the highest standards of quality. All of our products are vigorously tested and certified by the appropriate authorities.",
-  },
-  {
-    number: "03",
-    title: "TRANSPORT & DELIVERY",
-    image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeec0_Rectangle.svg",
-    detaiText: "From the manufacturer's warehouse to your project site, we work with freight providers to ensure that your goods will arrive right on schedule.",
-  },
-]);
+const introductionItems = ref(homeData.introductionItems);
+const processItems = ref(homeData.processItems);
+//详情图
+const detailImageVisible = ref(false);
+const detailImage = ref("");
 
-const productTinyImageMouseEnterHandler = () => {
-  isShowDetailImage.value = true;
+const showImage = (src: string) => {
+  detailImageVisible.value = true;
+  detailImage.value = src;
 };
-const productTinyImageMouseLeaveHandler = () => {
-  isShowDetailImage.value = false;
-};
-const isShowDetailImage = ref(false);
 
-const clientItems = ref([
-  {
-    number: "01",
-    title: "MICL",
-    image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeebc_Circle.svg",
-  },
-  {
-    number: "02",
-    title: "FORTH \n DEVELOPMENT",
-    image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeebf_Triangle.svg",
-  },
-  {
-    number: "03",
-    title: "BOMBAY \n DARBAR",
-    image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeec0_Rectangle.svg",
-  },
-]);
+const productItems = ref(homeData.productItems);
 
-// const productList = ref([
-//   {
-//     mainImage:"",
-//   }
-// ])
+const clientItems = ref(homeData.clientLogos);
+
+const leaders = ref(homeData.leaders);
 </script>
 
 <style scoped lang="scss">
@@ -415,7 +326,7 @@ const clientItems = ref([
 
       // linear-gradient(360deg, #222, rgba(34, 34, 34, 0))
 
-      .content {
+      .content-container {
         max-width: 1200px;
         margin: 0 auto;
         width: 100%;
@@ -425,40 +336,30 @@ const clientItems = ref([
         flex-direction: column;
         align-items: flex-start;
         justify-content: center;
-      }
-      .header {
-        width: 50%;
-        color: #f9f9f9;
-        font-size: 62px;
-        line-height: 1.2;
-        font-weight: 600;
-      }
-      .sub-header {
-        width: 35%;
-        color: #f9f9f9;
-        margin-bottom: 25px;
-        font-size: 18px;
-        margin-top: 20px;
-        line-height: 1.5;
-      }
+        position: relative;
 
-      .btn {
-        border: 1px solid #eb5757;
-        border-radius: 5px;
-        padding: 10px 25px;
-        font-weight: 700;
-        transition: border-color 0.3s, background-color 0.3s, color 0.3s;
-        cursor: pointer;
-        display: inline-block;
-        box-sizing: border-box;
-        background-color: transparent;
-        color: #fff;
-        text-align: center;
-        border: 1px solid #fff;
-
-        &:hover {
-          background-color: #fff;
-          color: #111;
+        .content-block {
+          width: 700px;
+          position: absolute;
+          bottom: 100px;
+          left: 40px;
+          background-color: #00000066;
+          padding: 60px;
+          .header {
+            width: 100%;
+            color: #f9f9f9;
+            font-size: 42px;
+            line-height: 1.2;
+            font-weight: 300;
+          }
+          .sub-header {
+            width: 80%;
+            color: #f9f9f9;
+            margin-bottom: 24px;
+            font-size: 18px;
+            margin-top: 30px;
+            line-height: 1.5;
+          }
         }
       }
     }
@@ -476,27 +377,38 @@ const clientItems = ref([
     .header {
       display: flex;
       justify-content: space-between;
-      align-self: center;
+      flex-wrap: wrap;
       color: #333;
       margin-bottom: 40px;
 
       .left-content {
+        align-self: flex-end;
         flex: 1;
         .sub-title {
-          font-size: 16px;
+          font-size: 20px;
           line-height: 1.5;
+          color: #ff5b13;
         }
         .title {
-          font-size: 40px;
+          font-size: 48px;
           line-height: 1.2;
-          font-weight: 600;
+          color: #282828;
         }
       }
 
       .right-content {
         flex: 1;
+        align-self: flex-end;
 
-        font-size: 16px;
+        font-size: 20px;
+        color: #9a9a9b;
+        line-height: 1.5;
+      }
+      .header-description {
+        width: 100%;
+        margin-top: 10px;
+        font-size: 20px;
+        color: #9a9a9b;
         line-height: 1.5;
       }
     }
@@ -508,49 +420,142 @@ const clientItems = ref([
 
       .block-container {
         width: 30%;
+        background-image: url("");
+        background-position: 50% 50%;
+        background-size: cover;
+        // background-color: #222;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+
+        &:hover {
+          .detail-text {
+            background-color: #22222266;
+            color: #fff;
+          }
+        }
+
         .block {
-          min-height: 350px;
-          background-color: #222;
+          min-height: 280px;
           border-radius: 5px;
           justify-content: center;
           align-items: center;
-          margin-bottom: 45px;
           display: flex;
           position: relative;
-          overflow: hidden;
-          margin-bottom: 40px;
           white-space: pre-line;
-          .number {
-            color: #f9f9f9;
-            font-size: 40px;
-            font-weight: 700;
-            position: absolute;
-            top: 10%;
-            bottom: auto;
-            left: 10%;
-            right: auto;
-          }
+          padding: 40px;
+
           .title {
-            color: #f9f9f9;
+            color: #fff;
+
             text-align: center;
             text-transform: uppercase;
-            font-size: 40px;
-            font-weight: 700;
-            line-height: 1.2;
+            font-size: 30px;
+            // font-weight: 700;
+            line-height: 40px;
           }
-          .bg-image {
+
+          .double-quote {
             position: absolute;
-            position: absolute;
-            bottom: -10%;
-            right: -8%;
-            width: 120px;
-            height: 120px;
+            font-size: 180px;
+            bottom: -120px;
+            font-weight: 900;
+            left: 40px;
+            color: #000;
+            text-shadow: 0 0 10px #fff;
+            font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
           }
         }
 
         .detail-text {
+          flex: 1;
+          background-color: #fff;
+          padding: 40px 20px 20px 20px;
           font-size: 16px;
-          line-height: 1.5;
+          color: #9a9a9b;
+          line-height: 1.6;
+          transition: all 0.6s;
+        }
+      }
+
+      &.process-swiper-container {
+        margin-top: 100px;
+        align-items: center;
+        position: relative;
+        .left-arrow-container {
+          position: absolute;
+          text-align: center;
+          left: -100px;
+          width: 100px;
+          top: 50%;
+
+          transform: translateY(-50%);
+        }
+        .right-arrow-container {
+          text-align: right;
+          right: -100px;
+          width: 100px;
+          top: 50%;
+
+          transform: translateY(-50%);
+          position: absolute;
+        }
+        .process-header {
+          font-size: 52px;
+          line-height: 62px;
+          font-weight: 300;
+          color: #282828;
+        }
+        .process-subheader {
+          font-size: 24px;
+          color: #1e1e1e;
+          margin-top: 60px;
+          margin-bottom: 10px;
+          font-family: "Courier New", Courier, monospace;
+        }
+        .process-description {
+          font-size: 16px;
+          line-height: 1.8;
+
+          color: #9a9a9b;
+        }
+        .value-container {
+          display: flex;
+          justify-content: space-between;
+          font-size: 60px;
+          font-weight: bold;
+          margin: 60px 0;
+
+          .left,
+          .right {
+            flex: 1;
+          }
+        }
+        .about-me-btn {
+          background-color: #222;
+          color: #fff;
+          text-align: center;
+          display: inline-block;
+          padding: 16px 40px;
+          border-radius: 30px;
+          font-size: 14px;
+        }
+
+        .process-img {
+          aspect-ratio: 1/1;
+          width: 100%;
+        }
+        .zoom-in {
+          width: 50px;
+          height: 50px;
+          background-color: rgba(0, 0, 0, 0.6);
+          position: absolute;
+          bottom: 30px;
+          right: 40px;
+          z-index: 2;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
       }
       .product-item-container {
@@ -595,116 +600,129 @@ const clientItems = ref([
           }
         }
       }
-      .product-left-container,
-      .product-right-container {
+    }
+
+    .product-grid-container {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 32%);
+      justify-content: space-between;
+      grid-gap: 20px 20px;
+
+      .product-item {
+        aspect-ratio: 1/1;
         position: relative;
-        height: 600px;
-      }
-      .product-left-container {
-        margin: 0 40px;
-        .main-img {
+
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+
+        .product-title {
           width: 100%;
           height: 100%;
-          border-radius: 6px;
-          object-fit: cover;
-        }
-        .detail-img {
-          position: absolute;
-          top: 20px;
-          left: -60px;
-          width: 200px;
-          height: 200px;
-          border-radius: 50%;
-          object-fit: cover;
-          box-shadow: 0 0 10px rgba(30, 30, 30, 0.5);
-          transition: opacity 0.3s;
-          opacity: 0;
-        }
-        .list-img-container {
-          position: absolute;
-          right: -80px;
-          bottom: 10%;
           display: flex;
-          width: 160px;
-          height: 300px;
-          flex-direction: column;
-          justify-content: space-between;
           align-items: center;
+          justify-content: center;
+          background-color: #00000099;
+          color: #fff;
+          font-size: 60px;
+          transition: all 0.3s;
+          opacity: 0;
 
-          .tiny-img {
-            width: 80px;
-            height: 80px;
-            border-radius: 6px;
-            box-shadow: 0 0 10px rgba(30, 30, 30, 0.5);
+          &:hover {
+            opacity: 1;
           }
         }
       }
-      .product-right-container {
-        margin: 0 40px;
-        position: relative;
+    }
+
+    .logo-container {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 100px;
+      height: 120px;
+
+      .logo {
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+  }
+  .leadership-container {
+    width: 100%;
+    height: 720px;
+    margin: 0 auto;
+    background-color: #111;
+    margin-bottom: 140px;
+
+    .content {
+      width: 100%;
+      max-width: 1200px;
+      height: 100%;
+      margin: 0 auto;
+      padding-top: 20px;
+
+      .header {
+        width: 100%;
+        font-size: 50px;
+        color: #fff;
+        text-transform: uppercase;
+        height: 60px;
+        margin-bottom: 40px;
+      }
+      .leader-container {
+        width: 100%;
+        height: calc(100% - 100px);
         display: flex;
         flex-wrap: wrap;
-        flex-direction: column;
+        justify-content: space-between;
 
-        .header-container {
-          margin-bottom: 40px;
-          .product-header {
+        .leader-block {
+          width: 48%;
+          padding-top: 160px;
+          // background-color: #240146;
+          color: #fff;
+          position: relative;
+          .leader-name {
+            font-size: 50px;
+            font-weight: 300;
+            margin-bottom: 100px;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
             width: 100%;
-            color: #111;
-            font-size: 38px;
-            line-height: 1.25;
-            letter-spacing: -0.025em;
-            font-weight: 600;
           }
-          .product-sub-header {
-            width: 100%;
-            color: #111;
-            margin-bottom: 16px;
-            margin-top: 16px;
-            line-height: 28.8px;
-          }
-        }
+          .leader-description {
+            position: relative;
+            z-index: 1;
 
-        .property-container {
-          flex: 1 1 auto;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: flex-start;
-
-          .property-item {
-            border-radius: 6px;
-            width: 300px;
-            padding: 16px;
             font-size: 18px;
-            color: #333;
-            margin-bottom: 10px;
+            line-height: 28px;
+            padding: 20px;
+            background: rgba(30, 30, 30, 0.7);
+          }
 
-            &.active,
-            &:hover {
-              background-color: #eee;
-            }
+          .leader-image {
+            position: absolute;
+            height: 100%;
+            bottom: 0;
+            left: 0;
+            z-index: 0;
+            // object-fit: cover;
           }
         }
       }
     }
   }
-
-  .product-section {
-    width: 100%;
-    max-width: 1200px;
-    min-height: 100%;
-    padding: 80px 0;
-    margin: 0 auto;
-
-    display: flex;
-
-    .left-content {
-      flex: 1;
-    }
-    .right-content {
-      flex: 1;
-    }
+  :deep(.el-dialog) {
+    background-color: transparent;
+  }
+  :deep(.el-dialog__header) {
+    padding: 0;
+  }
+  :deep(.el-dialog__body) {
+    padding: 0;
   }
 }
 </style>
