@@ -9,8 +9,8 @@ const layoutData: {
   productsMenu: [],
 };
 
-productListData.categoryList.forEach((element, index) => {
-  const imageUrl = `./assets/${index + 1}.jpg`;
+productListData.categoryList.forEach((element) => {
+  // const imageUrl = `./assets/${index + 1}.jpg`;
   // layoutData.productsMenu.push({ name: element.name, value: element.value, image: imageUrl });
   layoutData.productsMenu.push({ name: element.name, path: element.value });
 });
