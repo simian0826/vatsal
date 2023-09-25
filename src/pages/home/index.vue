@@ -97,7 +97,7 @@
                 </div>
                 <div class="about-me-btn">More about me</div>
               </el-col>
-              <el-col :span="12" style="position: relative;">
+              <el-col :span="12" style="position: relative">
                 <img :src="item.image" class="process-img" />
                 <div class="zoom-in" @click="showImage(item.image)">
                   <el-icon color="#fff" size="26"><ZoomIn /></el-icon>
@@ -164,7 +164,7 @@
     </div>
 
     <el-dialog :show-close="false" lock-scroll v-model="detailImageVisible" width="70%">
-      <img style="width: 100%;" :src="detailImage" />
+      <img style="width: 100%" :src="detailImage" />
     </el-dialog>
   </div>
 </template>
