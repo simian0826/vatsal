@@ -97,7 +97,7 @@
                 </div>
                 <div class="about-me-btn">More about me</div>
               </el-col>
-              <el-col :span="12" style="position: relative">
+              <el-col :span="12" style="position: relative;">
                 <img :src="item.image" class="process-img" />
                 <div class="zoom-in" @click="showImage(item.image)">
                   <el-icon color="#fff" size="26"><ZoomIn /></el-icon>
@@ -136,7 +136,7 @@
       </div>
     </div>
 
-    <div class="our-clients-container">
+    <div class="our-clients-container" style="padding-bottom: 40px;">
       <div class="header">
         <div class="left-content">
           <div class="sub-title">FULLY SATISFIED</div>
@@ -164,7 +164,7 @@
     </div>
 
     <el-dialog :show-close="false" lock-scroll v-model="detailImageVisible" width="70%">
-      <img style="width: 100%" :src="detailImage" />
+      <img style="width: 100%;" :src="detailImage" />
     </el-dialog>
   </div>
 </template>
@@ -326,7 +326,7 @@ const leaders = ref(homeData.leaders);
       // linear-gradient(360deg, #222, rgba(34, 34, 34, 0))
 
       .content-container {
-        max-width: 1200px;
+        max-width: 1100px;
         margin: 0 auto;
         width: 100%;
         height: 100%;
@@ -347,7 +347,7 @@ const leaders = ref(homeData.leaders);
           .header {
             width: 100%;
             color: #f9f9f9;
-            font-size: 42px;
+            font-size: 26px;
             line-height: 1.2;
             font-weight: 300;
           }
@@ -355,7 +355,7 @@ const leaders = ref(homeData.leaders);
             width: 80%;
             color: #f9f9f9;
             margin-bottom: 24px;
-            font-size: 18px;
+            font-size: 15px;
             margin-top: 30px;
             line-height: 1.5;
           }
@@ -368,7 +368,7 @@ const leaders = ref(homeData.leaders);
   .our-clients-container,
   .product-list-container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1100px;
     min-height: 100%;
     padding: 80px 0;
     margin: 0 auto;
@@ -384,12 +384,12 @@ const leaders = ref(homeData.leaders);
         align-self: flex-end;
         flex: 1;
         .sub-title {
-          font-size: 20px;
+          font-size: 18px;
           line-height: 1.5;
           color: #ff5b13;
         }
         .title {
-          font-size: 48px;
+          font-size: 26px;
           line-height: 1.2;
           color: #282828;
         }
@@ -399,14 +399,14 @@ const leaders = ref(homeData.leaders);
         flex: 1;
         align-self: flex-end;
 
-        font-size: 20px;
+        font-size: 15px;
         color: #9a9a9b;
         line-height: 1.5;
       }
       .header-description {
         width: 100%;
         margin-top: 10px;
-        font-size: 20px;
+        font-size: 15px;
         color: #9a9a9b;
         line-height: 1.5;
       }
@@ -449,15 +449,15 @@ const leaders = ref(homeData.leaders);
 
             text-align: center;
             text-transform: uppercase;
-            font-size: 30px;
+            font-size: 26px;
             // font-weight: 700;
-            line-height: 40px;
+            line-height: 1.2;
           }
 
           .double-quote {
             position: absolute;
-            font-size: 180px;
-            bottom: -120px;
+            font-size: 80px;
+            bottom: -55px;
             font-weight: 900;
             left: 40px;
             color: #000;
@@ -469,8 +469,8 @@ const leaders = ref(homeData.leaders);
         .detail-text {
           flex: 1;
           background-color: #fff;
-          padding: 40px 20px 20px 20px;
-          font-size: 16px;
+          padding: 30px 10px 20px 10px;
+          font-size: 15px;
           color: #9a9a9b;
           line-height: 1.6;
           transition: all 0.6s;
@@ -500,20 +500,20 @@ const leaders = ref(homeData.leaders);
           position: absolute;
         }
         .process-header {
-          font-size: 52px;
+          font-size: 38px;
           line-height: 62px;
           font-weight: 300;
           color: #282828;
         }
         .process-subheader {
-          font-size: 24px;
+          font-size: 20px;
           color: #1e1e1e;
           margin-top: 60px;
           margin-bottom: 10px;
           font-family: "Courier New", Courier, monospace;
         }
         .process-description {
-          font-size: 16px;
+          font-size: 15px;
           line-height: 1.8;
 
           color: #9a9a9b;
@@ -521,7 +521,7 @@ const leaders = ref(homeData.leaders);
         .value-container {
           display: flex;
           justify-content: space-between;
-          font-size: 60px;
+          font-size: 38px;
           font-weight: bold;
           margin: 60px 0;
 
@@ -624,9 +624,10 @@ const leaders = ref(homeData.leaders);
           justify-content: center;
           background-color: #00000099;
           color: #fff;
-          font-size: 60px;
+          font-size: 38px;
           transition: all 0.3s;
           opacity: 0;
+          text-align: center;
 
           &:hover {
             opacity: 1;
@@ -650,21 +651,21 @@ const leaders = ref(homeData.leaders);
   }
   .leadership-container {
     width: 100%;
-    height: 720px;
+    // height: 720px;
     margin: 0 auto;
     background-color: #111;
-    margin-bottom: 140px;
+    margin-bottom: 1px;
 
     .content {
       width: 100%;
-      max-width: 1200px;
+      max-width: 1100px;
       height: 100%;
       margin: 0 auto;
-      padding-top: 20px;
+      padding-top: 60px;
 
       .header {
         width: 100%;
-        font-size: 50px;
+        font-size: 38px;
         color: #fff;
         text-transform: uppercase;
         height: 60px;
@@ -684,7 +685,7 @@ const leaders = ref(homeData.leaders);
           color: #fff;
           position: relative;
           .leader-name {
-            font-size: 50px;
+            font-size: 26px;
             font-weight: 300;
             margin-bottom: 100px;
             padding: 20px;
@@ -696,7 +697,7 @@ const leaders = ref(homeData.leaders);
             position: relative;
             z-index: 1;
 
-            font-size: 18px;
+            font-size: 15px;
             line-height: 28px;
             padding: 20px;
             background: rgba(30, 30, 30, 0.7);

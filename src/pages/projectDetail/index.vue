@@ -34,7 +34,7 @@
           <swiper-container
             ref="swiperRef"
             :style="{
-              'max-width': '1200px',
+              'max-width': '1100px',
               height: '400px',
             }"
             :space-between="20"
@@ -244,7 +244,7 @@ const materials = ref([
   .introduction-container {
     width: 100%;
     display: flex;
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 80px 0px;
     justify-content: center;
@@ -284,7 +284,7 @@ const materials = ref([
     }
 
     .material-container {
-      max-width: 1400px;
+      max-width: 1100px;
       width: 100%;
       margin: 0 auto;
 

@@ -43,7 +43,7 @@ COPY --from=build-stage /app/dist /usr/share/nginx/html
 # COPY nginx.conf /etc/nginx/nginx.conf
 
 # 暴露容器的 80 端口
-EXPOSE 80
+  EXPOSE 80
 
 # 运行 nginx 服务器
 CMD ["nginx", "-g", "daemon off;"]

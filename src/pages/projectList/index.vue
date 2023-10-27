@@ -99,7 +99,7 @@ const completedProjects = ref<ProjectListItem[]>(projectListData.completedProjec
   .ongoing-container,
   .completed-container {
     width: 100%;
-    max-width: 1400px;
+    max-width: 1100px;
     min-height: 100%;
     padding: 80px 0;
     margin: 0 auto;
@@ -121,8 +121,9 @@ const completedProjects = ref<ProjectListItem[]>(projectListData.completedProjec
       grid-template-columns: repeat(3, 32%);
       .block-container {
         margin-bottom: 40px;
+        aspect-ratio: 366/491.81;
         .block {
-          height: 480px;
+          height: 100%;
           // background-color: #222;
           border-radius: 5px;
           justify-content: center;
@@ -232,7 +233,7 @@ const completedProjects = ref<ProjectListItem[]>(projectListData.completedProjec
 
   .product-section {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1100px;
     min-height: 100%;
     padding: 80px 0;
     margin: 0 auto;

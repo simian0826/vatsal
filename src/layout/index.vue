@@ -83,16 +83,50 @@
       <div class="footer-content">
         <el-row>
           <el-col :span="4">
-            <img src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54f4b1fdac99df37742ee_Untitled.png" class="footer-logo" />
+            <img @click="vueRouter.push({ path: '/' })" src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54f4b1fdac99df37742ee_Untitled.png" class="footer-logo" />
           </el-col>
           <el-col :span="20">
             <el-row>
               <el-col :key="index" v-for="(item, index) in footerNav" :span="6">
-                <div class="title">
-                  <router-link :to="item.link">
+                <template v-if="item.linkType === 'scroll'">
+                  <div class="title">
+                    <router-link :to="item.link">
+                      {{ item.sectionName }}
+                    </router-link>
+                  </div>
+                  <ul v-if="item.children">
+                    <li :key="subIndex" v-for="(subItem, subIndex) in item.children">
+                      <template v-if="item.sectionName === 'Contact Us'">
+                        <a href="mailto:404888541@qq.com">404888541@qq.com</a>
+                      </template>
+                      <template v-else>
+                        <router-link
+                          :to="item.link"
+                          v-scroll-to="{
+                            el: subItem.link,
+                            offset: -100,
+                          }"
+                        >
+                          {{ subItem.sectionName }}
+                        </router-link>
+                      </template>
+                    </li>
+                  </ul>
+                </template>
+
+                <template v-else-if="item.linkType === 'type'">
+                  <div class="title">
+                    <router-link :to="item.link">
+                      {{ item.sectionName }}
+                    </router-link>
+                  </div>
+                </template>
+                <template v-else>
+                  <div class="title">
                     {{ item.sectionName }}
-                  </router-link>
-                </div>
+                  </div>
+                </template>
+
                 <ul v-if="item.children">
                   <li :key="subIndex" v-for="(subItem, subIndex) in item.children">
                     <template v-if="item.sectionName === 'Contact Us'">
@@ -198,6 +232,7 @@ const footerNav = ref<FooterNavItem[]>([
   {
     sectionName: "Our Products",
     link: "/productList",
+    linkType: "type",
     children: [
       {
         sectionName: "Tiles",
@@ -228,7 +263,7 @@ const footerNav = ref<FooterNavItem[]>([
   {
     sectionName: "Projects",
     link: "/projectList",
-
+    linkType: "scroll",
     children: [
       {
         sectionName: "Ongoing Projects",
@@ -243,6 +278,7 @@ const footerNav = ref<FooterNavItem[]>([
   {
     sectionName: "Contact Us",
     link: "mailto:404888541@qq.com",
+    linkType: "external",
     children: [
       {
         sectionName: "404888541@qq.com",
@@ -299,7 +335,7 @@ const footerNav = ref<FooterNavItem[]>([
       display: flex;
       align-items: center;
       justify-content: space-between;
-      max-width: 1400px;
+      max-width: 1100px;
       width: 100%;
       margin: 0 auto;
       height: 100%;
@@ -308,7 +344,7 @@ const footerNav = ref<FooterNavItem[]>([
         height: 100px;
       }
       .company-name {
-        font-size: 32px;
+        font-size: 26px;
         color: #fff;
       }
     }
@@ -382,7 +418,7 @@ const footerNav = ref<FooterNavItem[]>([
     background-color: #111;
 
     .footer-content {
-      max-width: 1200px;
+      max-width: 1100px;
       margin: 0 auto;
 
       .footer-logo {

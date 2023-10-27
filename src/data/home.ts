@@ -84,30 +84,30 @@ const homeData: {
   productItems: [
     {
       title: "Tile", //展示的值
-      image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caeea1/64d54eb7f99a540e86caeeaa_patrick-hendry-eDgUyGu93Yw-unsplash.jpg",
+      image: "./assets/homeProductCategory/tiles.jpg",
     },
     {
-      title: "Stone",
-      image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caeea1/64d54eb7f99a540e86caeea8_ryan-holloway-JyDmUaXMib4-unsplash.jpg",
+      title: "Lighting",
+      image: "/assets/homeProductCategory/lighting.jpg",
     },
     {
-      title: "Wood Door",
-      image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caeea1/64d54eb7f99a540e86caeea7_denisse-leon-J7CjWufjmg4-unsplash.jpg",
+      title: "Door",
+      image: "/assets/homeProductCategory/door.jpg",
     },
     {
-      title: "Plumbing",
-      image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caeea1/64d54eb7f99a540e86caeea6_jakob-owens-O_bhy3TnSYU-unsplash.jpg",
+      title: "Furniture",
+      image: "/assets/homeProductCategory/furniture.jpg",
     },
     {
-      title: "Light",
-      image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caeea1/64d54eb7f99a540e86caeea8_ryan-holloway-JyDmUaXMib4-unsplash.jpg",
+      title: "Artificial Stone",
+      image: "/assets/homeProductCategory/artificialStone.jpg",
     },
     {
-      title: "Gas Stove",
-      image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caeea1/64d54eb7f99a540e86caeea7_denisse-leon-J7CjWufjmg4-unsplash.jpg",
+      title: "Natural Stone",
+      image: "/assets/homeProductCategory/naturalStone.jpg",
     },
   ],
-  clientLogos: ["./assets/logo.png", "./assets/logo-forth-development.png", "./assets/logo-bombay-darbar.png"],
+  clientLogos: ["./assets/logo-micl.png", "./assets/logo-forth-development.png", "./assets/logo-bombay-darbar.png"],
   leaders: [
     {
       name: "Anil",

@@ -94,7 +94,7 @@ onMounted(() => {
 
   .content-container {
     width: 100%;
-    max-width: 1400px;
+    max-width: 1100px;
     min-height: 800px;
     padding: 80px 0;
     margin: 0 auto;

@@ -323,7 +323,7 @@ const sites = ref([
     padding: 100px 100px;
     background-color: #f2f2f2;
     .main-block {
-      max-width: 1400px;
+      max-width: 1100px;
       width: 100%;
       display: flex;
       margin: 0 auto;
@@ -388,7 +388,7 @@ const sites = ref([
 
     .section {
       width: 100%;
-      max-width: 1400px;
+      max-width: 1100px;
       margin: 0 auto;
 
       .header-container {
