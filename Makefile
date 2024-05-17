@@ -1,5 +1,5 @@
 stop:
-	@container_id=$(shell docker ps -aq --filter "image=vatsal:1.0"); \
+	@container_id=$(shell docker ps -aq --filter "ancestor=vatsal:1.0"); \
     if [ -n "$$container_id" ]; then \
         docker stop $$container_id; \
     else \
