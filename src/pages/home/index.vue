@@ -978,22 +978,31 @@ const leaders = ref(homeData.leaders);
             z-index: 1;
             width: 100%;
             text-align: right;
+            text-shadow: 0 0 2px rgba(0, 0, 0, 0.9);
           }
           .leader-description {
             position: relative;
             z-index: 1;
             min-height: 164px;
 
-            font-size: 15px;
             line-height: 24px;
             padding: 20px;
             background: rgba(30, 30, 30, 0.7);
             margin-bottom: 40px;
+            @include responseTo("xs") {
+              line-height: 20px;
+
+              font-size: 14px;
+            }
+            @include responseTo("sm") {
+              line-height: 24px;
+              font-size: 15px;
+            }
           }
 
           .leader-image {
             position: absolute;
-            height: 100%;
+            width: 100%;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
