@@ -33,7 +33,6 @@ const collapsedRef = ref(props.collapsed);
 
 <style scoped lang="scss">
 .collapsed-container {
-
   .header {
     display: flex;
     justify-content: space-between;
@@ -48,9 +47,9 @@ const collapsedRef = ref(props.collapsed);
       line-height: 32px;
     }
   }
-  .content{
+  .content {
     overflow: hidden;
-    transition: height .6s;
+    transition: height 0.6s;
   }
 }
 </style>

@@ -9,7 +9,6 @@ export enum BreakPointEnum {
   XL = 1920,
 }
 
-
 export enum sizeEnum {
   XS = "XS",
   SM = "SM",
@@ -36,5 +35,3 @@ screenMap.set(sizeEnum.LG, screenEnum.LG);
 screenMap.set(sizeEnum.XL, screenEnum.XL);
 
 export { screenMap };
-
-

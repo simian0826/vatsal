@@ -36,7 +36,7 @@ const productListData: {
   ],
   //右侧列表展示数据，跟分类的值对应
   categoryItemGroup: {
-    "tiles": [
+    tiles: [
       {
         id: 1, //数字，必须唯一值
         img: "./assets/1.jpg", //封面图路径
@@ -100,7 +100,7 @@ const productListData: {
         name: "Quarzo Verde Aqua",
       },
     ],
-    "doors": [
+    doors: [
       {
         id: 11,
         img: "./assets/11.jpg",
@@ -176,7 +176,7 @@ const productListData: {
         name: "Vicenza Beige",
       },
     ],
-    "cabinet": [
+    cabinet: [
       {
         id: 23,
         img: "./assets/19.jpg",
@@ -190,7 +190,7 @@ const productListData: {
         name: "Vicenza Beige",
       },
     ],
-    "porcelain": [
+    porcelain: [
       {
         id: 23,
         img: "./assets/19.jpg",

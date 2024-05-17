@@ -10,12 +10,9 @@ export type ProductDetail = {
   productInfoImg: string;
   properties: ProductDetailProperty[];
   certificate: string[];
- 
-
 };
 
 export type ProductDetailProperty = {
   name: string;
-  items: {label:string, value: string}[]
-}
-
+  items: { label: string; value: string }[];
+};

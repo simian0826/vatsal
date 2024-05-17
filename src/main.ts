@@ -7,7 +7,7 @@ import "virtual:svg-icons-register";
 import globalComponents from "@/components";
 import zhCn from "element-plus/dist/locale/zh-cn.mjs";
 import "element-plus/dist/index.css";
-import 'element-plus/theme-chalk/display.css'
+import "element-plus/theme-chalk/display.css";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import { register } from "swiper/element/bundle";
 import "swiper/css";

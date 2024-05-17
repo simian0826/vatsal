@@ -7,7 +7,7 @@ export type ProductListItem = {
 };
 
 export type CategoryTypeValue = "tiles" | "natural stones" | "artificial stones" | "porcelain" | "doors" | "cabinet";
-``
+``;
 export type CategoryListItem = {
   name: string;
   value: CategoryTypeValue;
