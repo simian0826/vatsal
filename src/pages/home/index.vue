@@ -1002,11 +1002,16 @@ const leaders = ref(homeData.leaders);
 
           .leader-image {
             position: absolute;
-            width: 100%;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
             z-index: 0;
+            @include responseTo("xs") {
+              width: 100%;
+            }
+            @include responseTo("sm") {
+              height: 100%;
+            }
             // object-fit: cover;
           }
         }
