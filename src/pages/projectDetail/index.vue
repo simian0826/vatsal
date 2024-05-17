@@ -1,223 +1,145 @@
 <template>
   <div class="project-container">
-    <div class="hero-container">
-      <img class="hero-image" src="https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-1.jpg" />
-    </div>
+    <HeroSection />
 
     <div class="introduction-container">
-      <div class="sub-title">MIXED-USE</div>
-      <div class="title">MIAMI BEACH COLIVING</div>
+      <div class="sub-title">{{ projectDetail?.header.subtitle }}</div>
+      <div class="title">{{ projectDetail?.header.title }}</div>
       <div class="description">
-        This project features coliving, coworking, and an extended-stay hotel component alongside welln, nextTickess amenities and a robust food and beverage program, open to the neighborhood and
-        community. The project will offer 10,319 SF of leasable workspace and combined 125 living spaces across hotel rooms and co-living residences. The ground floor will house F&B options including
-        grab and go snacks/meals and a bar offering entertainment to guests and residents.
+        {{ projectDetail?.header.description }}
       </div>
     </div>
 
     <div class="bg-section">
       <div class="material-container">
-        <div class="left-arrow-container" @click="swiperPrevious">
-          <el-icon color="#666" size="40">
-            <ArrowLeftBold />
-          </el-icon>
-        </div>
-
         <div class="material-content">
-          <el-divider
-            :style="{
-              'margin-bottom': '80px',
-            }"
-            content-position="center"
-          >
-            <div class="header">Material Supplied</div>
-          </el-divider>
-          <swiper-container
+          <div class="header">Material Supplied</div>
+
+          <div class="navigation-container hidden-xs-only">
+            <div class="left-arrow-container" @click="swiperPrevious">
+              <el-icon>
+                <ArrowLeftBold />
+              </el-icon>
+            </div>
+            <div class="right-arrow-container" @click="swiperNext">
+              <el-icon><ArrowRightBold /></el-icon>
+            </div>
+          </div>
+
+          <swiper
+            :swipeHandler="true"
             ref="swiperRef"
             :style="{
-              'max-width': '1100px',
-              height: '400px',
+              height: '360px',
             }"
+            :pagination="swiperPagination"
             :space-between="20"
-            :slides-per-view="3"
+            :slides-per-view="breakpoint === sizeEnum.XS ? 2 : 6"
             :speed="500"
-            :scrollbar="true"
           >
-            <swiper-slide v-for="(item, index) in materials" :key="index">
+            <swiper-slide v-for="(item, index) in projectDetail?.materials" :key="index">
               <div class="material-item-container">
                 <img :src="item.image" class="material-img" />
                 <div class="content-container">
                   <div class="title">{{ item.title }}</div>
-                  <div class="title">{{ item.title }}</div>
-                  <div class="price">{{ item.price }}</div>
-                  <div class="vat">{{ item.vat }}</div>
+                  <div class="price">{{ item.subtitle }}</div>
+                  <div class="vat">{{ item.taxType }}</div>
                 </div>
               </div>
             </swiper-slide>
-          </swiper-container>
-        </div>
-
-        <div class="right-arrow-container" @click="swiperNext">
-          <el-icon color="#666" size="40"><ArrowRightBold /></el-icon>
+          </swiper>
         </div>
       </div>
     </div>
     <div class="gallery-container">
-      <el-divider
-        :style="{
-          'margin-bottom': '80px',
-        }"
-        content-position="center"
-      >
-        <div class="header">Project Images</div>
-      </el-divider>
-      <img class="image" src="https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-2.jpg" />
-      <!-- <el-row :gutter="20" style="height: 100%;">
-        <el-col :span="12"><img src="https://miclglobal.com/wp-content/uploads/2022/08/collage.jpg"/></el-col>
-        <el-col :span="12">
-          <el-row :gutter="20" style="height: 50%;">
-            <el-col :span="12"></el-col>
-            <el-col :span="12"></el-col>
-          </el-row>
-          <el-row :gutter="20" style="height: 50%;"></el-row>
-        </el-col>
-      </el-row> -->
+      <div class="header">Project Images</div>
+      <div class="carousel-container">
+        <el-carousel v-if="breakpoint !== sizeEnum.XS" indicator-position="none" :interval="4000" type="card">
+          <el-carousel-item v-for="(img, index) in projectDetail?.projectImages" :key="index">
+            <img class="image" :src="img" />
+          </el-carousel-item>
+        </el-carousel>
+
+        <swiper style="width: 100vw" v-else :pagination="swiperPagination" ref="projectImageSwiperRef" :space-between="20">
+          <swiper-slide v-for="(item, index) in projectDetail?.projectImages" :key="index">
+            <img class="image" :src="item" />
+          </swiper-slide>
+        </swiper>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import HeroSection from "@/components/HeroSection.vue";
+
+import projectDetailDatas from "@/data/projectDetail";
+
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ref, onMounted, VNodeRef } from "vue";
+import { ref, onMounted } from "vue";
 gsap.registerPlugin(ScrollTrigger);
-import { Scrollbar } from "swiper/modules";
-import "swiper/css/scrollbar";
+
+import { Navigation, Pagination, Controller } from "swiper/modules";
 import SwiperCore from "swiper";
-import { SwiperSlide } from "swiper/vue";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/scss";
+import "swiper/scss/navigation";
+import "swiper/scss/pagination";
 
-SwiperCore.use([Scrollbar]);
+import { ElNotification } from "element-plus";
+import { useRoute, useRouter } from "vue-router";
 
+import { sizeEnum } from "@/enums/breakPoint";
+import { createBreakpointListen } from "@/hooks/useBreakpoint";
+const route = useRoute();
+const router = useRouter();
+const projectId = route.params.id;
+SwiperCore.use([Navigation, Pagination, Controller]);
+const { screenRef: breakpoint } = createBreakpointListen();
 const swiperRef = ref();
-const aboutUsRef = ref(null);
-const aboutUsHeaderLeftRef = ref(null);
-const aboutUsHeaderRightRef = ref(null);
+const projectImageSwiperRef = ref();
 
-const aboutUsBlockRefs: VNodeRef[] = [];
+let swiperPagination = {
+  clickable: true,
+  // modifierClass: "my-pagination",
+  // bulletActiveClass: "bullet-active",
+  // bulletClass: "bullet",
+  renderBullet: (_: any, className: any) => {
+    const style = { width: "16px", borderRadius: "0px", margin: "auto", height: "3px" };
+    return `<span class="${className}" style="width: ${style.width}; border-radius: ${style.borderRadius}; background-color: #f5f5f5; height: ${style.height}"></span>`;
+  },
+  modules: [Pagination],
+};
 
-const swiperNext = () => {
-  swiperRef.value.swiper.slideNext();
+let swiperNext = () => {
+  console.log(swiperRef.value);
+  if (swiperRef.value) {
+    swiperRef.value.$el.swiper.slideNext();
+  }
 };
-const swiperPrevious = () => {
-  swiperRef.value.swiper.slidePrev();
+let swiperPrevious = () => {
+  if (swiperRef.value) {
+    swiperRef.value.$el.swiper.slidePrev();
+  }
 };
+
 onMounted(() => {
   // console.log(aboutUsBlockRefs);
   console.log("swiperRef", swiperRef);
-
-  const aboutUsLeftTimeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: aboutUsRef.value,
-      scrub: 0,
-      start: "top 80%",
-      end: "bottom 120%",
-    },
-  });
-  const aboutUsRightTimeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: aboutUsRef.value,
-      scrub: 1,
-      start: "top 70%",
-      end: "bottom 110%",
-    },
-  });
-  const aboutUsBlockTimeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: aboutUsRef.value,
-      scrub: 1,
-      start: "top 60%",
-      end: "bottom 120%",
-    },
-  });
-
-  aboutUsBlockRefs.forEach((item, index) => {
-    aboutUsBlockTimeline.fromTo(
-      item,
-      {
-        opacity: 0,
-        translateY: index % 2 == 0 ? 40 : -40,
-      },
-      {
-        translateY: 0,
-
-        opacity: 1,
-      },
-    );
-  });
-
-  aboutUsLeftTimeline.fromTo(
-    aboutUsHeaderLeftRef.value,
-    {
-      opacity: 0,
-      translateX: -50,
-    },
-    {
-      translateX: 0,
-
-      opacity: 1,
-    },
-  );
-  aboutUsRightTimeline.fromTo(
-    aboutUsHeaderRightRef.value,
-    {
-      opacity: 0,
-      translateX: 50,
-    },
-    {
-      translateX: 0,
-      opacity: 1,
-    },
-  );
 });
 
-const materials = ref([
-  {
-    price: "subtitle",
-    title: "PRODUCT SELECTION",
-    image: "./assets/6.jpg",
-    vat: "Including VAT",
-  },
-  {
-    price: "subtitle",
-    title: "QUALITY CONTROL",
-    image: "./assets/1.jpg",
-    vat: "Including VAT",
-  },
-  {
-    price: "subtitle",
-    title: "TRANSPORT & DELIVERY",
-    image: "./assets/2.jpg",
+const projectDetailData = projectDetailDatas.find((item) => item.id == projectId);
+if (!projectDetailData) {
+  ElNotification({
+    title: "Error",
+    message: "Could not find product",
+    type: "error",
+  });
+  router.go(-1);
+}
 
-    vat: "Including VAT",
-  },
-  {
-    price: "subtitle",
-    title: "TRANSPORT & DELIVERY",
-    image: "./assets/3.jpg",
-    vat: "Including VAT",
-  },
-  {
-    price: "subtitle",
-    title: "TRANSPORT & DELIVERY",
-    image: "./assets/4.jpg",
-    vat: "Including VAT",
-  },
-  {
-    price: "subtitle",
-    title: "TRANSPORT & DELIVERY",
-    image: "./assets/5.jpg",
-    description: "From the manufacturer's warehouse to your project site, we work with freight providers to ensure that your goods will arrive right on schedule.",
-  },
-]);
+const projectDetail = ref(projectDetailData);
 
 // const productList = ref([
 //   {
@@ -231,80 +153,117 @@ const materials = ref([
   width: 100%;
   position: relative;
 
-  .hero-container {
-    width: 100%;
-    height: 100vh;
-    .hero-image {
-      width: 100%;
-      height: 100vh;
-      object-fit: cover;
-      background: #000;
-    }
-  }
   .introduction-container {
     width: 100%;
     display: flex;
     max-width: 1100px;
     margin: 0 auto;
-    padding: 80px 0px;
     justify-content: center;
     flex-wrap: wrap;
+    padding: 80px 0px;
+
+    @include responseTo("xs") {
+      padding: 40px 20px;
+    }
 
     .sub-title {
       width: 100%;
-      color: #005482;
+      color: #d2cece;
       font-weight: 300;
       letter-spacing: 5px;
       font-size: 15px;
       text-align: center;
+      @include responseTo("xs") {
+        font-size: 15px;
+      }
+      @include responseTo("sm") {
+        font-size: 15px;
+      }
     }
     .title {
       width: 100%;
       text-align: center;
       text-transform: uppercase;
-      color: #2d2d2d;
-      font-size: 52px;
-      margin-bottom: 15px;
-      margin: 20px;
+      color: #e2e0e0;
+      margin: 20px 0;
+      @include responseTo("xs") {
+        font-size: 32px;
+        border-top: 2px solid #e2e0e0;
+        border-bottom: 2px solid #e2e0e0;
+        padding-block: 8px;
+      }
+      @include responseTo("sm") {
+        font-size: 52px;
+      }
     }
     .description {
+      color: #e2e0e0;
       font-size: 17px;
       letter-spacing: 0;
       line-height: 1.8;
       text-align: center;
+      word-break: break-all;
+      @include responseTo("xs") {
+        font-size: 15px;
+      }
     }
   }
   .bg-section {
-    --bgcolor: #f1f0ea;
+    --bgcolor: #2a2a2a;
     background-color: var(--bgcolor);
     width: 100%;
 
-    :deep(.el-divider__text) {
-      background-color: var(--bgcolor);
-    }
-
     .material-container {
-      max-width: 1100px;
-      width: 100%;
+      // max-width: 1100px;
+      width: 1100px;
       margin: 0 auto;
-
       display: flex;
-      .left-arrow-container {
-        width: 40px;
+      position: relative;
+
+      @include responseTo("xs") {
+        width: 100vw;
+        padding: 0 20px;
+        --position-value: 20px;
+      }
+      @include responseTo("sm") {
+        width: 1100px;
+        --position-value: 20px;
+      }
+
+      @mixin arrow-container($position, $position-value) {
+        padding: 10px;
         flex-shrink: 0;
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: pointer;
+        background-color: rgba(1, 1, 1, 0.5);
+        color: #fff;
+        border-radius: 12px;
+        position: absolute;
+        z-index: 2;
+
+        @include responseTo("xs") {
+          font-size: 22px;
+          top: 40%;
+        }
+        @include responseTo("sm") {
+          font-size: 32px;
+          top: 50%;
+        }
+        @if $position == "left" {
+          left: $position-value;
+        } @else {
+          right: $position-value;
+        }
+      }
+      .left-arrow-container {
+        @include arrow-container("left", var(--position-value));
       }
       .right-arrow-container {
-        width: 40px;
-        flex-shrink: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
+        @include arrow-container("right", var(--position-value));
       }
+
       .material-content {
         flex: 1 1 auto;
 
@@ -313,14 +272,21 @@ const materials = ref([
         align-content: flex-start;
         flex-wrap: wrap;
         padding: 40px 0;
+        width: 100%;
 
         .header {
           width: 100%;
-          // text-align: center;
-          // text-transform: uppercase;
-          color: #2d2d2d;
-          font-size: 36px;
-          // margin-bottom: 80px;
+          font-weight: 400;
+          color: #e2e0e0;
+          text-align: center;
+          @include responseTo("xs") {
+            font-size: 28px;
+            margin-bottom: 40px;
+          }
+          @include responseTo("sm") {
+            font-size: 32px;
+            margin-bottom: 60px;
+          }
         }
 
         :deep(.swiper-button-prev),
@@ -341,7 +307,7 @@ const materials = ref([
 
           .material-img {
             width: 100%;
-            aspect-ratio: 16/9;
+            aspect-ratio: 186/231;
             object-fit: cover;
             border-radius: 2px;
           }
@@ -352,19 +318,19 @@ const materials = ref([
               width: 100%;
               box-sizing: border-box;
               display: flex;
-              color: #111;
-              font-size: 16px;
+              color: #d5d2d2;
+              font-size: 14px;
             }
             .title {
-              color: #111;
-              font-size: 18px;
+              color: #d5d2d2;
+              font-size: 16px;
               margin-bottom: 6px;
             }
             .price {
-              color: #111;
+              color: #d5d2d2;
               font-weight: 600;
               margin-bottom: 6px;
-              font-size: 20px;
+              font-size: 14px;
               margin-top: 12px;
             }
           }
@@ -394,22 +360,37 @@ const materials = ref([
   }
 
   .gallery-container {
-    width: 100%;
-    min-height: 100vh;
     margin: 0 auto;
     padding-top: 40px;
+
+    @include responseTo("xs") {
+      width: 100%;
+    }
+    @include responseTo("sm") {
+      width: 1100px;
+    }
     .header {
       width: 100%;
+      font-weight: 400;
+      color: #e2e0e0;
       text-align: center;
-      // text-transform: uppercase;
-      color: #2d2d2d;
-      font-size: 52px;
+      @include responseTo("xs") {
+        font-size: 28px;
+        margin-bottom: 40px;
+      }
+      @include responseTo("sm") {
+        font-size: 32px;
+        margin-bottom: 60px;
+      }
     }
 
-    .image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .carousel-container {
+      padding-bottom: 40px;
+      .image {
+        width: 100%;
+        object-fit: cover;
+        aspect-ratio: 653/392;
+      }
     }
   }
 }

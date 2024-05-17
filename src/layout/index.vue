@@ -7,13 +7,26 @@
         // background: isTop
         //   ? 'transparent'
         //   : 'linear-gradient(#99999933 10%, #66666633 70% , #00000033 100%)',
-        background: '#00000022',
-        zIndex: drawerOpened ? 99 : 99999,
+        zIndex: drawerOpened ? 99 : 1000,
       }"
     >
       <div class="header-content">
-        <!-- <img class="logo" src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54f4b1fdac99df37742ee_Untitled.png" /> -->
-        <div class="company-name">VEDA SOURCING</div>
+        <div class="mobile-menu-container hidden-sm-and-up">
+          <el-dropdown>
+            <el-button plain circle :icon="Menu" style="background-color: #111111; box-shadow: 0px 0px 10px rgba(155, 155, 155, 0.6); color: #f9f9f9"></el-button>
+
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item :key="index" v-for="(item, index) in menu" @click="menuItemClick(item, true)" :divided="index !== 0">
+                  {{ item.name }}
+                  <!-- <a  v-if="item.linkType === 'external'" :href="item.link">{{ item.sectionName }}</a>-->
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+        <img class="logo" src="/assets/logo-veda.png" />
+        <!-- <div class="company-name">VEDA SOURCING</div> -->
       </div>
       <div class="nav-container">
         <div class="menu-item" :key="index" :index="item.path" v-for="(item, index) in menu" @click="menuItemClick(item)">
@@ -45,7 +58,7 @@
         </el-menu> -->
       </div>
     </div>
-    <el-drawer class="drawer" v-model="showDrawer" direction="rtl" size="45%" :with-header="false" @opened="drawerOpened = true" @closed="drawerOpened = false">
+    <el-drawer class="drawer" v-model="showDrawer" direction="rtl" size="830" :with-header="false" @opened="drawerOpened = true" @closed="drawerOpened = false">
       <div
         class="nav-container"
         :style="{
@@ -53,11 +66,6 @@
           backgroundColor: drawerOpened ? '#000' : 'transparent',
         }"
       >
-        <!-- <el-menu :default-active="activeRoute" mode="horizontal" class="menu-container" :ellipsis="false">
-          <el-menu-item :key="index" :index="item.path" v-for="(item, index) in menu" :class="activeRoute === item.path ? 'is-active' : ''" @click="menuItemClick(item)">
-            <div class="menu-item-title">{{ item.name }}</div>
-          </el-menu-item>
-        </el-menu> -->
         <div class="menu-item" :key="index" :index="item.path" v-for="(item, index) in menu" @click="drawerMenuItemClick(item)">
           <div class="menu-item-title" :class="path === item.path ? 'is-active' : ''">{{ item.name }}</div>
         </div>
@@ -79,11 +87,11 @@
         </transition>
       </router-view>
     </div>
-    <div class="footer">
+    <div class="footer hidden-xs-only">
       <div class="footer-content">
         <el-row>
           <el-col :span="4">
-            <img @click="vueRouter.push({ path: '/' })" src="https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54f4b1fdac99df37742ee_Untitled.png" class="footer-logo" />
+            <img @click="vueRouter.push({ path: '/' })" src="/assets/logo-veda.png" class="footer-logo" />
           </el-col>
           <el-col :span="20">
             <el-row>
@@ -94,24 +102,6 @@
                       {{ item.sectionName }}
                     </router-link>
                   </div>
-                  <ul v-if="item.children">
-                    <li :key="subIndex" v-for="(subItem, subIndex) in item.children">
-                      <template v-if="item.sectionName === 'Contact Us'">
-                        <a href="mailto:404888541@qq.com">404888541@qq.com</a>
-                      </template>
-                      <template v-else>
-                        <router-link
-                          :to="item.link"
-                          v-scroll-to="{
-                            el: subItem.link,
-                            offset: -100,
-                          }"
-                        >
-                          {{ subItem.sectionName }}
-                        </router-link>
-                      </template>
-                    </li>
-                  </ul>
                 </template>
 
                 <template v-else-if="item.linkType === 'type'">
@@ -156,6 +146,7 @@
 
 <script setup lang="ts">
 import { FooterNavItem, MenuItem } from "@/types/layout";
+import { Menu } from "@element-plus/icons-vue";
 import layoutData from "@/data/layout";
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
@@ -187,9 +178,9 @@ const submenu = ref<MenuItem[]>([]);
 const activeRoute = computed(() => {
   return vueRouter.currentRoute.value.path;
 });
-const menuItemClick = (item: MenuItem) => {
+const menuItemClick = (item: MenuItem, isPopupButton = false) => {
   path.value = item.path;
-  if (item.children) {
+  if (item.children && !isPopupButton) {
     showDrawer.value = true;
     submenu.value = item.children;
   } else {
@@ -247,15 +238,15 @@ const footerNav = ref<FooterNavItem[]>([
         link: "",
       },
       {
-        sectionName: "Lighting",
+        sectionName: "Porcelain",
         link: "",
       },
       {
-        sectionName: "Furniture",
+        sectionName: "Cabinet",
         link: "",
       },
       {
-        sectionName: "Woodend Door",
+        sectionName: "Door",
         link: "",
       },
     ],
@@ -306,6 +297,9 @@ const footerNav = ref<FooterNavItem[]>([
 }
 
 .container {
+  --menuItemFontSize: 20px;
+  --menuItemFontSizeFirstLetter: 20px;
+
   --headerH: 140px;
   height: 100%;
   width: 100%;
@@ -318,30 +312,46 @@ const footerNav = ref<FooterNavItem[]>([
     }
   }
   .nav-header {
+    @include responseTo("xs") {
+      --headerH: auto;
+      background: #00000099;
+    }
+    @include responseTo("sm") {
+      background: #00000022;
+    }
     width: 100%;
     position: fixed;
     width: 100%;
 
     height: var(--headerH);
-    background-color: transparent;
     box-sizing: border-box;
     padding: 20px 0px;
 
     top: 0;
-    z-index: 9;
+    z-index: 3;
     transition: background-color 0.3s, boxShadow 0.5s;
 
     .header-content {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      max-width: 1100px;
+      // justify-content: space-between;
       width: 100%;
       margin: 0 auto;
       height: 100%;
-      .logo {
+      @include responseTo("xs") {
         width: 100px;
-        height: 100px;
+        justify-content: center;
+      }
+      @include responseTo("lg") {
+        max-width: 1100px;
+      }
+      .logo {
+        @include responseTo("xs") {
+          width: 100px;
+        }
+        @include responseTo("sm") {
+          width: 200px;
+        }
       }
       .company-name {
         font-size: 26px;
@@ -354,14 +364,16 @@ const footerNav = ref<FooterNavItem[]>([
       padding: 0 40px;
       top: 0;
       right: 0px;
-      width: 45%;
       height: 100%;
       display: flex;
       justify-content: space-between;
+      @include responseTo("xs") {
+        display: none;
+      }
 
       .menu-item {
         flex: 1;
-
+        width: 150px;
         cursor: pointer;
 
         display: flex;
@@ -369,40 +381,15 @@ const footerNav = ref<FooterNavItem[]>([
         justify-content: center;
 
         .menu-item-title {
-          font-size: 18px;
+          font-size: var(--menuItemFontSize);
           color: rgba(255, 255, 255, 0.8);
           &::first-letter {
-            font-size: 26px;
+            font-size: var(--menuItemFontSizeFirstLetter);
           }
           &.is-active {
-            font-size: 24px;
+            // font-weight: bold;
             color: #fff;
             position: relative;
-            // background: radial-gradient(ellipse at center, #ffffff66 20%, transparent 75%, transparent 100%);
-
-            // &::before,
-            // &::after {
-            //   content: "";
-            //   width: 4px;
-            //   height: 4px;
-            //   border-radius: 50%;
-
-            //   background-color: #fff;
-            //   position: absolute;
-            //   top: 50%;
-            //   transform: translateY(-50%);
-            // }
-            // &::before {
-            //   left: -10px;
-            // }
-            // &::after {
-            //   content: "";
-
-            //   right: -10px;
-            // }
-            &::first-letter {
-              font-size: 32px;
-            }
           }
         }
       }
@@ -422,8 +409,7 @@ const footerNav = ref<FooterNavItem[]>([
       margin: 0 auto;
 
       .footer-logo {
-        width: 80px;
-        height: 80px;
+        width: 120px;
       }
 
       .title {
@@ -459,6 +445,112 @@ const footerNav = ref<FooterNavItem[]>([
       }
     }
   }
+
+  .mobile-menu-container {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    z-index: 9999;
+  }
+
+  :deep(.el-drawer__body) {
+    padding: 0;
+
+    .nav-container {
+      position: absolute;
+      top: 0;
+      // right: 100px;
+      width: 100%;
+      // padding-right: 100px;
+      // width: 70%;
+      padding: 0 40px;
+
+      height: var(--headerH);
+      display: flex;
+      justify-content: space-between;
+      opacity: 0;
+      transition: opacity 0.3s;
+
+      .menu-item {
+        flex: 1;
+        cursor: pointer;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .menu-item-title {
+          position: relative;
+          font-size: var(--menuItemFontSize);
+
+          color: rgba(255, 255, 255, 0.8);
+          // &::first-letter {
+          //   font-size: var(--menuItemFontSizeFirstLetter);
+          // }
+          &.is-active {
+            // font-size: 28px;
+            // font-weight: bold;
+            color: #fff;
+            position: relative;
+
+            &::after {
+              position: absolute;
+              display: inline-block;
+              content: "";
+              width: 80%;
+              height: 0.5px;
+              background-color: rgba(255, 255, 255, 0.2);
+              left: 50%;
+              transform: translateX(-50%);
+              bottom: -16px;
+            }
+            // background: radial-gradient(ellipse at center, #ffffff66 20%, transparent 75%, transparent 100%);
+
+            // &::before,
+            // &::after {
+            //   content: "";
+            //   width: 4px;
+            //   height: 4px;
+            //   border-radius: 50%;
+
+            //   background-color: #fff;
+            //   position: absolute;
+            //   top: 50%;
+            //   transform: translateY(-50%);
+            // }
+            // &::before {
+            //   left: -10px;
+            // }
+            // &::after {
+            //   content: "";
+
+            //   right: -10px;
+            // }
+            // &::first-letter {
+            //   font-size: 36px;
+            // }
+          }
+        }
+      }
+    }
+
+    .drawer-content {
+      margin-top: var(--headerH);
+      height: calc(100% - var(--headerH));
+      background-color: #000;
+      transition: background-color 0.3s;
+      display: flex;
+      flex-direction: column;
+      padding: 40px;
+      transition: opacity 0.3s;
+
+      .sub-menu-item {
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 24px;
+        margin-bottom: 50px;
+      }
+    }
+  }
 }
 
 .sub-menu-container {
@@ -483,103 +575,6 @@ const footerNav = ref<FooterNavItem[]>([
   }
 }
 
-:deep(.el-drawer__body) {
-  padding: 0;
-
-  .nav-container {
-    position: absolute;
-    top: 0;
-    // right: 100px;
-    width: 100%;
-    // padding-right: 100px;
-    // width: 70%;
-    padding: 0 40px;
-
-    height: var(--headerH);
-    display: flex;
-    justify-content: space-between;
-    opacity: 0;
-    transition: opacity 0.3s;
-
-    .menu-item {
-      flex: 1;
-      cursor: pointer;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .menu-item-title {
-        position: relative;
-        font-size: 18px;
-        color: rgba(255, 255, 255, 0.8);
-        &::first-letter {
-          font-size: 26px;
-        }
-        &.is-active {
-          font-size: 24px;
-          color: #fff;
-          position: relative;
-
-          &::after {
-            position: absolute;
-            display: inline-block;
-            content: "";
-            width: 80%;
-            height: 0.5px;
-            background-color: rgba(255, 255, 255, 0.2);
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: -16px;
-          }
-          // background: radial-gradient(ellipse at center, #ffffff66 20%, transparent 75%, transparent 100%);
-
-          // &::before,
-          // &::after {
-          //   content: "";
-          //   width: 4px;
-          //   height: 4px;
-          //   border-radius: 50%;
-
-          //   background-color: #fff;
-          //   position: absolute;
-          //   top: 50%;
-          //   transform: translateY(-50%);
-          // }
-          // &::before {
-          //   left: -10px;
-          // }
-          // &::after {
-          //   content: "";
-
-          //   right: -10px;
-          // }
-          &::first-letter {
-            font-size: 32px;
-          }
-        }
-      }
-    }
-  }
-
-  .drawer-content {
-    margin-top: var(--headerH);
-    height: calc(100% - var(--headerH));
-    background-color: #000;
-    transition: background-color 0.3s;
-    display: flex;
-    flex-direction: column;
-    padding: 40px;
-    transition: opacity 0.3s;
-
-    .sub-menu-item {
-      cursor: pointer;
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 24px;
-      margin-bottom: 50px;
-    }
-  }
-}
-
 :deep(.el-menu--horizontal > .el-menu-item.is-active),
 :deep(.el-menu--horizontal > .el-menu-item) {
   border-bottom: none;
@@ -590,5 +585,13 @@ const footerNav = ref<FooterNavItem[]>([
   outline: 0;
   color: var(--el-menu-hover-text-color);
   background-color: transparent;
+}
+:deep(.el-dropdown__popper.el-popper) {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+:deep(.el-dropdown-menu) {
+  background-color: rgba(255, 255, 255, 0.6) !important;
 }
 </style>

@@ -6,8 +6,8 @@ export type ProductListItem = {
   image: string;
 };
 
-export type CategoryTypeValue = "tile" | "stone" | "woodDoor" | "plumbing" | "light";
-
+export type CategoryTypeValue = "tiles" | "natural stones" | "artificial stones" | "porcelain" | "doors" | "cabinet";
+``
 export type CategoryListItem = {
   name: string;
   value: CategoryTypeValue;

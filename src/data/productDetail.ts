@@ -1,37 +1,122 @@
-import { MaterialItem } from "@/types/productDetail";
+import { ProductDetail } from "@/types/productDetail";
 
-const productDetailData: {
-  heroImgUrl: string;
-  header: {
-    title: string;
-    subtitle: string;
-    description: string;
-  };
-  materials: MaterialItem[];
-  projectImage: string;
-}[] = [
+const productDetailData:Partial<ProductDetail>[] = [
   {
-    //首屏大图
-    heroImgUrl: "https://miclglobal.com/wp-content/uploads/2022/08/Shipping-Avenue-Townhomes-1.jpg",
-    //抬头
-    header: {
-      title: "MIAMI BEACH COLIVING", //header 标题
-      subtitle: "MIXED-USE", // title 上面 子标题
-      description:
-        "This project features coliving, coworking, and an extended-stay hotel component alongside welln, nextTickess amenities and a robust food and beverage program, open to the neighborhood and community. The project will offer 10,319 SF of leasable workspace and combined 125 living spaces across hotel rooms and co-living residences. The ground floor will house F&B options including grab and go snacks/meals and a bar offering entertainment to guests and residents.", //header 描述
+    id: "1",
+    mainInfo: {
+      title: "Brightness,texture and  mattesilk",
+      categoty: "tile",
+      desc: "This is a summary of the product's narrative typesThis is a summary of the product's narrative typesThis is a summary.uct's narrative typesThis is a summary of the product's narrative typesThis is a summary of the product's narrative typesThis is a summary of .summary of the product's narrative typesThis is a summary of the product's narrative typesThis is a summary of the product's narrative typesThis is a summary of the product's narrative typesThis is a summary of the product's narrative typesThis is a summary of the product's narrative typesThis is a summary of the product's narrative typesThis is a summary of the product's narrative types.",
+      imgs: ["./assets/1.jpg","./assets/2.jpg","./assets/3.jpg"],
     },
-    materials: [
+    productName: "Product Name",
+    productInfoImg: "./assets/15.jpg",
+    properties: [
       {
-        id: 1, //material Id 数字， 不要重复
-        titleFirstLine: "titleFirstLine", //material 第一行标题
-        titleSecondLine: "titleSecondLine", // 第二行标题
-        subtitle: "subtitle", //子标题
-        taxType: "taxType", // 税的类型
-        image: "https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-2.jpg", // material 图片地址
+        name: "Surfaces",
+        items: [{
+          label: "Naturale",
+          value: "Naturale",
+        },{
+          label: "Full lappato",
+          value: "Full lappato",
+        },
+        {
+          label: "Lappato matt",
+          value: "Lappato matt",
+        },
+        {
+          label: "Spazzolato",
+          value: "Spazzolato",
+        },
+        {
+          label: "Lucido opaco",
+          value: "Lucido opaco",
+        },
+        {
+          label: "Rigato",
+          value: "Rigato",
+        },
+        {
+          label: "Bocciardato",
+          value: "Bocciardato",
+        },
+        {
+          label: "Pettinato",
+          value: "Pettinato",
+        },]
       },
+      {
+        name: "Color",
+        items: [{
+          label: "White",
+          value: "White",
+        },{
+          label: "Black",
+          value: "Black",
+        },
+        {
+          label: "Lappato matt",
+          value: "Lappato matt",
+        },
+        {
+          label: "Spazzolato",
+          value: "Spazzolato",
+        },
+        {
+          label: "Lucido opaco",
+          value: "Lucido opaco",
+        },
+        {
+          label: "Rigato",
+          value: "Rigato",
+        },
+        {
+          label: "Bocciardato",
+          value: "Bocciardato",
+        },
+        {
+          label: "Pettinato",
+          value: "Pettinato",
+        },]
+      },
+      {
+        name: "Thickness",
+        items: [{
+          label: "20mm",
+          value: "20mm",
+        },{
+          label: "30mm",
+          value: "30mm",
+        },
+        {
+          label: "40mm",
+          value: "40mm",
+        },
+       ]
+      },
+      {
+        name: "Size",
+        items: [{
+          label: "120x240cm",
+          value: "120x240cm",
+        },{
+          label: "80x160cm",
+          value: "80x160cm",
+        },
+        {
+          label: "120x120cm",
+          value: "120x120cm",
+        },
+        {
+          label: "120x160cm",
+          value: "120x160cm",
+        },
+       ]
+      }
     ],
-    projectImage: "https://miclglobal.com/wp-content/uploads/2022/08/Edition-Residences-Fort-Lauderdale-2.jpg", // project Images 的图片地址
-  },
+    certificate: ["./assets/logo.jpg","./assets/logo.jpg","./assets/logo.jpg"],
+  }
 ];
 
 export default productDetailData;

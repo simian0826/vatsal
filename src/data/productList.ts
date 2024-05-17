@@ -10,29 +10,33 @@ const productListData: {
   //左侧分类
   categoryList: [
     {
-      name: "Tile", //展示的值
-      value: "tile",
+      name: "Tiles", //展示的值
+      value: "tiles",
     },
     {
-      name: "Stone",
-      value: "stone",
+      name: "Natural Stones",
+      value: "natural stones",
     },
     {
-      name: "Wood Door",
-      value: "woodDoor",
+      name: "Artificial Stones",
+      value: "artificial stones",
     },
     {
-      name: "Plumbing",
-      value: "plumbing",
+      name: "Doors",
+      value: "doors",
     },
     {
-      name: "Light",
-      value: "light",
+      name: "Porcelain",
+      value: "porcelain",
+    },
+    {
+      name: "Cabinet",
+      value: "cabinet",
     },
   ],
   //右侧列表展示数据，跟分类的值对应
   categoryItemGroup: {
-    tile: [
+    "tiles": [
       {
         id: 1, //数字，必须唯一值
         img: "./assets/1.jpg", //封面图路径
@@ -70,7 +74,7 @@ const productListData: {
         name: "Vicenza Beige",
       },
     ],
-    stone: [
+    "natural stones": [
       {
         id: 7,
         img: "./assets/7.jpg",
@@ -96,7 +100,7 @@ const productListData: {
         name: "Quarzo Verde Aqua",
       },
     ],
-    woodDoor: [
+    "doors": [
       {
         id: 11,
         img: "./assets/11.jpg",
@@ -140,7 +144,7 @@ const productListData: {
         name: "Vicenza Beige",
       },
     ],
-    plumbing: [
+    "artificial stones": [
       {
         id: 18,
         img: "./assets/15.jpg",
@@ -172,7 +176,21 @@ const productListData: {
         name: "Vicenza Beige",
       },
     ],
-    light: [
+    "cabinet": [
+      {
+        id: 23,
+        img: "./assets/19.jpg",
+        type: "stone",
+        name: "Gabbro Sfumato",
+      },
+      {
+        id: 24,
+        img: "./assets/20.jpg",
+        type: "stone",
+        name: "Vicenza Beige",
+      },
+    ],
+    "porcelain": [
       {
         id: 23,
         img: "./assets/19.jpg",

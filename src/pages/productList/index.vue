@@ -1,11 +1,9 @@
 <template>
   <div class="project-list-container">
-    <div class="hero-container">
-      <img class="hero-image" src="https://miclglobal.com/wp-content/uploads/2022/08/Shipping-Avenue-Townhomes-1.jpg" />
-    </div>
+    <HeroSection />
     <div class="content-container">
       <el-row>
-        <el-col :span="8" class="category-container">
+        <el-col :span="24" class="category-container">
           <div
             :key="index"
             v-for="(item, index) in categoryList"
@@ -16,11 +14,14 @@
             @click="changeCategoryHandler(item.value)"
           >
             <div class="category-name">{{ item.name }}</div>
-            <el-icon size="18"><Plus /></el-icon>
           </div>
         </el-col>
-        <el-col :span="16" class="list-container">
+
+        <el-col :span="24" class="list-container">
           <div @click="router.push({ path: `/productDetail/${item.id}` })" v-for="(item, index) in presentItemList" :key="index" class="commodity-item-container">
+            <div class="mask-container">
+              <img class="icon" src="/assets/icons/link.png" />
+            </div>
             <img class="commodity-image" :src="item.img" />
             <div class="text-area">
               <div class="commodity-type">{{ item.type }}</div>
@@ -37,11 +38,12 @@
 import { ref, computed, onMounted, watch } from "vue";
 import productListData from "@/data/productList";
 import { CategoryTypeValue } from "@/types/productList";
+import HeroSection from "@/components/HeroSection.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const selectedCategory = ref<CategoryTypeValue>("tile");
+const selectedCategory = ref<CategoryTypeValue>("tiles");
 
 const categoryList = ref(productListData.categoryList);
 
@@ -81,6 +83,7 @@ onMounted(() => {
 .project-list-container {
   width: 100%;
   position: relative;
+  background-color: #222;
 
   .hero-container {
     width: 100%;
@@ -93,43 +96,72 @@ onMounted(() => {
   }
 
   .content-container {
-    width: 100%;
-    max-width: 1100px;
-    min-height: 800px;
-    padding: 80px 0;
     margin: 0 auto;
+    @include responseTo("xs") {
+      width: 100%;
+
+      padding: 30px 20px;
+    }
+
+    @include responseTo("sm") {
+      width: 1100px;
+      padding: 30px 0;
+    }
 
     .category-container {
-      height: 400px;
-      overflow-y: scroll;
-      padding-right: 40px;
+      // height: 400px;
+      padding-bottom: 30px;
+      display: grid;
+      justify-content: space-between;
+      @include responseTo("xs") {
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 10px;
+      }
+
+      @include responseTo("sm") {
+        grid-template-columns: repeat(6, 1fr);
+        grid-gap: 20px;
+      }
 
       .category-item-container {
-        width: 100%;
-        margin: 20px 0;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        align-content: flex-start;
-        cursor: pointer;
-        padding: 20px 10px;
+        justify-content: center;
+        border: 1px solid #e2e0e0;
+        border-radius: 6px;
+
+        @include responseTo("xs") {
+          grid-template-columns: repeat(3, 1fr);
+          padding: 6px 6px;
+        }
+
+        @include responseTo("sm") {
+          grid-template-columns: repeat(6, 1fr);
+          cursor: pointer;
+          padding: 8px 12px;
+        }
 
         &.selected {
-          background-color: #111;
-          color: #fff;
-
-          .category-name {
-            font-size: 18px;
-            color: #fff;
-
-            text-transform: uppercase;
-          }
+          // background-color: #111;
+          background-color: #545454;
+          // .category-name {
+          //   text-transform: uppercase;
+          // }
         }
 
         .category-name {
-          font-size: 18px;
-          color: #111;
+          transition: font-size 0.3s;
+
+          color: #fff;
           text-transform: uppercase;
+
+          @include responseTo("xs") {
+            font-size: 12px;
+          }
+
+          @include responseTo("sm") {
+            font-size: 18px;
+          }
         }
       }
     }
@@ -137,12 +169,19 @@ onMounted(() => {
     .list-container {
       display: grid;
       justify-content: space-between;
-      grid-template-columns: repeat(2, 50%);
       grid-gap: 20px 20px;
+
+      @include responseTo("xs") {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @include responseTo("sm") {
+        grid-template-columns: repeat(3, 1fr);
+      }
 
       .commodity-item-container {
         position: relative;
-        aspect-ratio: 2.4/1;
+        aspect-ratio: 1/1;
 
         .commodity-image {
           width: 100%;
@@ -153,21 +192,59 @@ onMounted(() => {
         }
         .text-area {
           width: 100%;
-          padding: 20px;
           position: absolute;
           bottom: 0;
           left: 0;
 
+          @include responseTo("xs") {
+            font-size: 16px;
+            padding: 10px 10px;
+          }
+
+          @include responseTo("sm") {
+            font-size: 20px;
+            padding: 10px 20px;
+          }
+
           .commodity-type {
-            font-size: 18px;
             color: #fff;
-            margin-bottom: 20px;
             text-transform: uppercase;
+            @include responseTo("xs") {
+              font-size: 18px;
+              margin-bottom: 4px;
+            }
+            @include responseTo("sm") {
+              margin-bottom: 10px;
+            }
           }
           .commodity-name {
-            font-size: 28px;
             color: #fff;
             text-transform: capitalize;
+          }
+        }
+
+        .mask-container {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          left: 0;
+          top: 0;
+          z-index: 1;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          opacity: 0;
+          transition: opacity 0.3s;
+          cursor: pointer;
+
+          &:hover {
+            opacity: 1;
+          }
+
+          .icon {
+            width: 70px;
+            height: 70px;
           }
         }
       }

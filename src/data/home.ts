@@ -19,18 +19,18 @@ const homeData: {
   introductionItems: [
     {
       title: "PRODUCT SELECTION",
-      image: "./assets/1.jpg",
+      image: "./assets/home-process-1.png",
       detaiText: "Our team is constantly scouring the globe to find new materials and inspiration. We work directly with manufacturers to secure the best rates for our customers.",
     },
     {
       title: "QUALITY CONTROL",
-      image: "./assets/2.jpg",
+      image: "./assets/home-process-2.png",
       detaiText:
         "Oversight at very level of the manufacturing and packaging process helps us maintain the highest standards of quality. All of our products are vigorously tested and certified by the appropriate authorities.",
     },
     {
       title: "TRANSPORT & DELIVERY",
-      image: "./assets/3.jpg",
+      image: "./assets/home-process-3.png",
       detaiText: "From the manufacturer's warehouse to your project site, we work with freight providers to ensure that your goods will arrive right on schedule.",
     },
   ],
@@ -42,7 +42,7 @@ const homeData: {
         "This copy introduces the product abstract This copy intro-duces the product abstract This copy introduces the product abstract This copy introduces the product abstract This copy introduces the product abstract This copy introducesthe product abstract This copy introduces the product abstract ",
       percentage: 82,
       amount: 100,
-      image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg",
+      image: "./assets/2.jpg",
     },
     {
       title: "This copy introduces the product title",
@@ -51,7 +51,7 @@ const homeData: {
         "This copy introduces the product abstract This copy intro-duces the product abstract This copy introduces the product abstract This copy introduces the product abstract This copy introduces the product abstract This copy introducesthe product abstract This copy introduces the product abstract ",
       percentage: 32,
       amount: 100,
-      image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecf_nathan-dumlao-pLoMDKtl-JY-unsplash.jpg",
+      image: "./assets/1.jpg",
     },
     {
       title: "This copy introduces the product title",
@@ -60,7 +60,7 @@ const homeData: {
         "This copy introduces the product abstract This copy intro-duces the product abstract This copy introduces the product abstract This copy introduces the product abstract This copy introduces the product abstract This copy introducesthe product abstract This copy introduces the product abstract ",
       percentage: 52,
       amount: 122,
-      image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg",
+      image: "./assets/3.jpg",
     },
     {
       title: "This copy introduces the product title",
@@ -69,7 +69,7 @@ const homeData: {
         "This copy introduces the product abstract This copy intro-duces the product abstract This copy introduces the product abstract This copy introduces the product abstract This copy introduces the product abstract This copy introducesthe product abstract This copy introduces the product abstract ",
       percentage: 12,
       amount: 140,
-      image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecf_nathan-dumlao-pLoMDKtl-JY-unsplash.jpg",
+      image: "./assets/4.jpg",
     },
     {
       title: "This copy introduces the product title",
@@ -78,7 +78,7 @@ const homeData: {
         "This copy introduces the product abstract This copy intro-duces the product abstract This copy introduces the product abstract This copy introduces the product abstract This copy introduces the product abstract This copy introducesthe product abstract This copy introduces the product abstract ",
       percentage: 92,
       amount: 109,
-      image: "https://uploads-ssl.webflow.com/64d54eb7f99a540e86caee57/64d54eb7f99a540e86caeecd_wu-jianxiong-UniC8xhlzaE-unsplash.jpg",
+      image: "./assets/5.jpg",
     },
   ],
   productItems: [
@@ -87,17 +87,14 @@ const homeData: {
       image: "./assets/homeProductCategory/tiles.jpg",
     },
     {
-      title: "Lighting",
-      image: "/assets/homeProductCategory/lighting.jpg",
+      title: "Porcelain",
+      image: "/assets/homeProductCategory/porcelain.png",
     },
     {
-      title: "Door",
-      image: "/assets/homeProductCategory/door.jpg",
+      title: "Carbinet",
+      image: "/assets/homeProductCategory/furniture.png",
     },
-    {
-      title: "Furniture",
-      image: "/assets/homeProductCategory/furniture.jpg",
-    },
+
     {
       title: "Artificial Stone",
       image: "/assets/homeProductCategory/artificialStone.jpg",
@@ -106,13 +103,18 @@ const homeData: {
       title: "Natural Stone",
       image: "/assets/homeProductCategory/naturalStone.jpg",
     },
+    {
+      title: "Door",
+      image: "/assets/homeProductCategory/door.jpg",
+    },
   ],
-  clientLogos: ["./assets/logo-micl.png", "./assets/logo-forth-development.png", "./assets/logo-bombay-darbar.png"],
+  clientLogos: ["./assets/logo-micl.png", "./assets/logo-forth-development.png", "./assets/logo-bombay-darbar.png", "./assets/logo-forth-development.png"],
   leaders: [
     {
       name: "Anil",
       description:
-        "Anil has a multi-faceted background in industries such as garment manufacturing and restaurants. Having run businesses across multiple countries, he has the expertise in finding the right manufacturers, ensuring quality control and managing logistica issuas",
+        "Anil has a multi-faceted background in industries such as garment manufacturing and restaurants. Having run businesses across multiple countries, he has the expertise in finding the right manufacturers, ensuring quality control and managing logistical issuas",
+      image: "./assets/anil.png",
     },
     {
       name: "Vatsal",
@@ -120,6 +122,18 @@ const homeData: {
         "Vatsal comes from a family with six decades of experience running a construction and real estate development powerhouse in India. He spearheads their firm's US division with a goal to match the Indian division's scale in just five short years. Through his involvement in this sector, he has intricate knowledge of the design, quality and value of materials used in construction",
       image: "./assets/vatsal.png",
     },
+    // {
+    //   name: "Wang Xinyu",
+    //   description:
+    //     "Vatsal comes from a family with six decades of experience running a construction and real estate development powerhouse in India. He spearheads their firm's US division with a goal to match the Indian division's scale in just five short years. Through his involvement in this sector, he has intricate knowledge of the design, quality and value of materials used in construction",
+    //   image: "./assets/vatsal.png",
+    // },
+    // {
+    //   name: "Vatsal2",
+    //   description:
+    //     "Vatsal comes from a family with six decades of experience running a construction and real estate development powerhouse in India. He spearheads their firm's US division with a goal to match the Indian division's scale in just five short years. Through his involvement in this sector, he has intricate knowledge of the design, quality and value of materials used in construction",
+    //   image: "./assets/vatsal.png",
+    // },
   ],
 };
 

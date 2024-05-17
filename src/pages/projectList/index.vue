@@ -1,60 +1,65 @@
 <template>
   <div class="project-list-container">
-    <div class="hero-container">
-      <img class="hero-image" :src="heroImgUrl" />
-    </div>
+    <HeroSection />
 
     <div class="ongoing-container" id="ongoing">
       <div class="header">ONGOING PROJECTS</div>
-
       <div class="list-content">
-        <div class="block-container" :key="index" v-for="(item, index) in onGoingProjects" @click="router.push({ path: `/projectDetail/${item.id}` })">
-          <div class="block">
-            <img class="bg-image" :src="item.image" />
+        <div class="block-item" :key="index" v-for="(item, index) in onGoingProjects" @click="router.push({ path: `/projectDetail/${item.id}` })">
+          <div class="image-container">
+            <img class="item-image" :src="item.image" />
             <div class="mask-container">
               <div class="explore-btn">explore</div>
             </div>
           </div>
-          <div class="sub-title">{{ item.subtitle }}</div>
-          <div class="title">{{ item.title }}</div>
-          <div class="location-container">
-            <el-icon
-              color="#005482"
-              :style="{
-                marginRight: '6px',
-              }"
-            >
-              <Location />
-            </el-icon>
-            <span>{{ item.location }}</span>
+          <div class="info-container">
+            <div class="extra-title">{{ item.subtitle }}</div>
+            <div class="main-info">
+              <div class="project-title">{{ item.title }}</div>
+              <div class="location-container">
+                <el-icon
+                  :style="{
+                    marginRight: '4px',
+                  }"
+                >
+                  <Location />
+                </el-icon>
+                <span>{{ item.location }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
+    <div class="hidden-sm-and-up" style="padding: 40px">
+      <div style="height: 1px; width: 100%; background-image: radial-gradient(#cecece88 1%, transparent 99%)"></div>
+    </div>
     <div class="completed-container" id="completed">
       <div class="header">COMPLETED PROJECTS</div>
 
       <div class="list-content">
-        <div class="block-container" :key="index" v-for="(item, index) in completedProjects" @click="router.push({ path: '/projectDetail' })">
-          <div class="block">
-            <img class="bg-image" :src="item.image" />
+        <div class="block-item" :key="index" v-for="(item, index) in completedProjects" @click="router.push({ path: `/projectDetail/${item.id}` })">
+          <div class="image-container">
+            <img class="item-image" :src="item.image" />
             <div class="mask-container">
               <div class="explore-btn">explore</div>
             </div>
           </div>
-          <div class="sub-title">{{ item.subtitle }}</div>
-          <div class="title">{{ item.title }}</div>
-          <div class="location-container">
-            <el-icon
-              color="#005482"
-              :style="{
-                marginRight: '6px',
-              }"
-            >
-              <Location />
-            </el-icon>
-            <span>{{ item.location }}</span>
+          <div class="info-container">
+            <div class="extra-title">{{ item.subtitle }}</div>
+            <div class="main-info">
+              <div class="project-title">{{ item.title }}</div>
+              <div class="location-container">
+                <el-icon
+                  :style="{
+                    marginRight: '4px',
+                  }"
+                >
+                  <Location />
+                </el-icon>
+                <span>{{ item.location }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -64,21 +69,16 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import HeroSection from "@/components/HeroSection.vue";
+
 import { useRouter } from "vue-router";
 import projectListData from "@/data/projectList";
 import { ProjectListItem } from "@/types/projectList";
 
 const router = useRouter();
-const heroImgUrl = ref<string>(projectListData.heroImgUrl);
 const onGoingProjects = ref<ProjectListItem[]>(projectListData.ongoingProjects);
 
 const completedProjects = ref<ProjectListItem[]>(projectListData.completedProjects);
-
-// const productList = ref([
-//   {
-//     mainImage:"",
-//   }
-// ])
 </script>
 
 <style scoped lang="scss">
@@ -98,63 +98,88 @@ const completedProjects = ref<ProjectListItem[]>(projectListData.completedProjec
 
   .ongoing-container,
   .completed-container {
-    width: 100%;
-    max-width: 1100px;
     min-height: 100%;
-    padding: 80px 0;
     margin: 0 auto;
 
+    @include responseTo("xs") {
+      width: 100%;
+      padding: 40px 0;
+    }
+    @include responseTo("sm") {
+      width: 1100px;
+      padding: 80px 0;
+    }
     .header {
-      padding: 5px 10px;
+      // padding: 5px 10px;
       font-weight: 500;
       text-transform: uppercase;
       font-size: 30px;
       letter-spacing: 4px;
-      color: #333;
+      color: #fff;
       margin-bottom: 40px;
+      @include responseTo("xs") {
+        width: 100%;
+        padding: 0 20px;
+        font-size: 28px;
+      }
     }
 
     .list-content {
       width: 100%;
-      display: grid;
-      justify-content: space-between;
-      grid-template-columns: repeat(3, 32%);
-      .block-container {
-        margin-bottom: 40px;
-        aspect-ratio: 366/491.81;
-        .block {
-          height: 100%;
-          // background-color: #222;
-          border-radius: 5px;
-          justify-content: center;
-          align-items: center;
+      @include responseTo("xs") {
+        width: 100%;
+        padding: 0 20px;
+      }
+      @include responseTo("sm") {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 20px;
+      }
+
+      .block-item {
+        aspect-ratio: 386/ 540;
+        background-color: #292929;
+        @include responseTo("xs") {
           margin-bottom: 20px;
-          display: flex;
-          position: relative;
+          &:last-child {
+            margin-bottom: 0px;
+          }
+        }
+
+        .image-container {
+          width: 100%;
+          aspect-ratio: 386/ 442;
           overflow: hidden;
-          white-space: pre-line;
-          cursor: pointer;
+          position: relative;
 
           &:hover {
             .mask-container {
               opacity: 1;
             }
-            .bg-image {
+            .item-image {
               transform: scale(1.05);
             }
           }
 
+          .item-image {
+            width: 100.1%;
+            height: 100.1%;
+            object-fit: cover;
+            transition: transform 0.3s;
+          }
           .mask-container {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            position: relative;
-            z-index: 1;
             background-color: rgba(0, 41, 63, 0.5);
+            transition: opacity 0.4s;
+            opacity: 0;
+            z-index: 2;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.4s;
-            opacity: 0;
             .explore-btn {
               padding: 14px 24px;
               text-align: center;
@@ -171,80 +196,39 @@ const completedProjects = ref<ProjectListItem[]>(projectListData.completedProjec
               }
             }
           }
+        }
 
-          .bg-image {
-            transition: transform 0.3s;
-            position: absolute;
-            z-index: -1;
-            width: 100%;
-            height: 100%;
-            transform-origin: 50% 50%;
-            object-fit: cover;
+        .info-container {
+          padding: 20px 10px;
+          .extra-title {
+            font-weight: 400;
+            font-size: 18px;
+            color: #a4a1a1;
+            line-height: 22px;
           }
-        }
-
-        .title {
-          width: 100%;
-          color: #222;
-          font-size: 18px;
-          font-weight: 600;
-          margin-bottom: 6px;
-        }
-        .sub-title {
-          width: 100%;
-          color: #666;
-          font-size: 14px;
-          margin-bottom: 6px;
-        }
-        .location-container {
-          color: #005482;
-          font-size: 13px;
-        }
-      }
-      .product-item-container {
-        width: 31%;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        .image {
-          width: 100%;
-          min-height: 500px;
-          border-radius: 5px;
-          object-fit: cover;
-          margin-bottom: 24px;
-        }
-
-        .btn {
-          background-color: #eb5757;
-          border: 1px solid #eb5757;
-          border-radius: 5px;
-          padding: 5px 25px;
-          font-weight: 700;
-          transition: background-color 0.3s;
-          color: #fff;
-          display: inline-block;
-          &:hover {
-            background-color: #111;
+          .main-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 6px;
+            .project-title {
+              color: #e8e8e8;
+              font-size: 18px;
+              font-weight: 600;
+            }
+            .location-container {
+              display: flex;
+              align-items: center;
+              justify-self: center;
+              color: #000;
+              font-size: 12px;
+              border-radius: 2px;
+              background: #959595;
+              padding: 4px 6px;
+            }
           }
         }
       }
-    }
-  }
-
-  .product-section {
-    width: 100%;
-    max-width: 1100px;
-    min-height: 100%;
-    padding: 80px 0;
-    margin: 0 auto;
-
-    display: flex;
-
-    .left-content {
-      flex: 1;
-    }
-    .right-content {
-      flex: 1;
     }
   }
 }
