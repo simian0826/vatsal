@@ -10,4 +10,4 @@ build:
 run:
 	@docker run -d -p 80:80 vatsal:1.0
 
-delopy: stop build run 
+deploy: stop build run 
