@@ -1,4 +1,4 @@
-import { ErrorItem } from "../types/error";
+import { ErrorItem } from "../type/error";
 // import { router } from "../router/index";
 
 const errorTypeList: ErrorItem[] = [

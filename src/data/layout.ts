@@ -1,5 +1,5 @@
 import productListData from "./productList";
-import { MenuItem } from "@/types/layout";
+import { MenuItem } from "@/type/layout";
 // import { CategoryListItem } from "@/types/productList";
 
 const layoutData: {

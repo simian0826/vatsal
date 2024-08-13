@@ -1,13 +1,13 @@
 <template>
   <div class="project-list-container">
-    <HeroSection />
+    <HeroSection :module="'project'" />
 
     <div class="ongoing-container" id="ongoing">
       <div class="header">ONGOING PROJECTS</div>
       <div class="list-content">
         <div class="block-item" :key="index" v-for="(item, index) in onGoingProjects" @click="router.push({ path: `/projectDetail/${item.id}` })">
           <div class="image-container">
-            <img class="item-image" :src="item.image" />
+            <img class="item-image" v-if="item.projectImages" :src="item.projectImages[0]" />
             <div class="mask-container">
               <div class="explore-btn">explore</div>
             </div>
@@ -29,6 +29,26 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="load-more-container">
+        <div
+          v-loading="onGoingLoading"
+          :element-loading-spinner="LoadingSvg"
+          element-loading-svg-view-box="-10, -10, 50, 50"
+          element-loading-background="rgba(122, 122, 122, 0.8)"
+          class="load-more-btn"
+          v-if="onGoingLoadMore"
+          @click="
+            () => {
+              handleOnGoingProjectList();
+            }
+          "
+        >
+          Load More
+        </div>
+
+        <div class="no-more" v-else>No More</div>
       </div>
     </div>
     <div class="hidden-sm-and-up" style="padding: 40px">
@@ -40,7 +60,7 @@
       <div class="list-content">
         <div class="block-item" :key="index" v-for="(item, index) in completedProjects" @click="router.push({ path: `/projectDetail/${item.id}` })">
           <div class="image-container">
-            <img class="item-image" :src="item.image" />
+            <img class="item-image" v-if="item.projectImages" :src="item.projectImages[0]" />
             <div class="mask-container">
               <div class="explore-btn">explore</div>
             </div>
@@ -63,22 +83,104 @@
           </div>
         </div>
       </div>
+
+      <div class="load-more-container">
+        <div
+          v-loading="completedLoading"
+          :element-loading-spinner="LoadingSvg"
+          element-loading-svg-view-box="-10, -10, 50, 50"
+          element-loading-background="rgba(122, 122, 122, 0.8)"
+          class="load-more-btn"
+          v-if="completedLoadMore"
+          @click="
+            () => {
+              handleCompeletedProjectList();
+            }
+          "
+        >
+          Load More
+        </div>
+
+        <div class="no-more" v-else>No More</div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onBeforeMount } from "vue";
 import HeroSection from "@/components/HeroSection.vue";
 
 import { useRouter } from "vue-router";
-import projectListData from "@/data/projectList";
-import { ProjectListItem } from "@/types/projectList";
+import type { Project, Pagenigation } from "@/api/model";
+
+import { getProjectListApi } from "@/api";
+import { LoadingSvg } from "@/assets/loading";
 
 const router = useRouter();
-const onGoingProjects = ref<ProjectListItem[]>(projectListData.ongoingProjects);
 
-const completedProjects = ref<ProjectListItem[]>(projectListData.completedProjects);
+const onGoingLoading = ref(false);
+const onGoingLoadMore = ref(true);
+
+const completedLoading = ref(false);
+const completedLoadMore = ref(true);
+
+const onGoingProjects = ref<Project[]>();
+const onGoingPagenigation = ref<Pagenigation>({ page: 1, pageSize: 6 });
+
+const completedProjects = ref<Project[]>();
+
+const completedPagenigation = ref<Pagenigation>({ page: 1, pageSize: 6 });
+
+const handleOnGoingProjectList = async () => {
+  onGoingLoading.value = true;
+
+  try {
+    const res = await getProjectListApi({
+      type: "onGoing",
+      ...onGoingPagenigation.value,
+    });
+    onGoingProjects.value = res.list;
+    if (res.list.length > 0) {
+      onGoingProjects.value.push(...res.list);
+    }
+    if (res.list.length != onGoingPagenigation.value.pageSize) {
+      onGoingLoadMore.value = false;
+    }
+  } catch (e) {
+    onGoingLoadMore.value = false;
+  } finally {
+    onGoingLoading.value = false;
+  }
+  onGoingPagenigation.value.page++;
+};
+const handleCompeletedProjectList = async () => {
+  onGoingLoading.value = true;
+
+  try {
+    const res = await getProjectListApi({
+      type: "completed",
+      ...completedPagenigation.value,
+    });
+    completedProjects.value = res.list;
+    if (res.list.length > 0) {
+      completedProjects.value.push(...res.list);
+    }
+    if (res.list.length != completedPagenigation.value.pageSize) {
+      completedLoadMore.value = false;
+    }
+  } catch (e) {
+    completedLoadMore.value = false;
+  } finally {
+    completedLoading.value = false;
+  }
+  completedPagenigation.value.page++;
+};
+
+onBeforeMount(async () => {
+  handleOnGoingProjectList();
+  handleCompeletedProjectList();
+});
 </script>
 
 <style scoped lang="scss">
@@ -230,6 +332,54 @@ const completedProjects = ref<ProjectListItem[]>(projectListData.completedProjec
         }
       }
     }
+
+    .load-more-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+      .load-more-btn {
+        padding: 6px 12px;
+        border: 1px solid #fff;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: #fff;
+          color: #111;
+        }
+      }
+
+      .no-more {
+        --noMoreColor: #999;
+        font-size: 20px;
+        color: var(--noMoreColor);
+        position: relative;
+
+        &::before {
+          content: "";
+          width: 12px;
+          height: 1px;
+          position: absolute;
+          top: 50%;
+          left: -24px;
+          background-color: var(--noMoreColor);
+        }
+        &::after {
+          content: "";
+          width: 12px;
+          height: 1px;
+          position: absolute;
+          top: 50%;
+          right: -24px;
+          background-color: var(--noMoreColor);
+        }
+      }
+    }
   }
 }
 </style>
+@/type/projectList

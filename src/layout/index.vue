@@ -17,7 +17,7 @@
 
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item :key="index" v-for="(item, index) in menu" @click="menuItemClick(item, true)" :divided="index !== 0">
+                <el-dropdown-item :key="index" v-for="(item, index) in menu" @click="menuItemClick(item)" :divided="index !== 0">
                   {{ item.name }}
                   <!-- <a  v-if="item.linkType === 'external'" :href="item.link">{{ item.sectionName }}</a>-->
                 </el-dropdown-item>
@@ -26,60 +26,13 @@
           </el-dropdown>
         </div>
         <img class="logo" src="/assets/logo-veda.png" />
-        <!-- <div class="company-name">VEDA SOURCING</div> -->
       </div>
       <div class="nav-container">
         <div class="menu-item" :key="index" :index="item.path" v-for="(item, index) in menu" @click="menuItemClick(item)">
           <div class="menu-item-title" :class="activeRoute === item.path ? 'is-active' : ''">{{ item.name }}</div>
         </div>
-
-        <!-- <el-menu :default-active="activeRoute" :ellipsis="false" mode="horizontal" class="menu-container">
-          <el-menu-item :key="index" :index="item.path" v-for="(item, index) in menu" :class="activeRoute === item.path ? 'is-active' : ''" @click="menuItemClick(item)">
-            <div class="menu-item-title">
-              {{ item.name }}
-            </div>
-            <div class="menu-item-title" v-if="item.name !== 'Products'">
-              {{ item.name }}
-            </div>
-            <el-popover v-else placement="bottom" :width="990" trigger="hover">
-              <template #reference>
-                <div class="menu-item-title">
-                  {{ item.name }}
-                </div>
-              </template>
-              <div class="sub-menu-container">
-                <router-link :to="`/productList?productType=${item.value}`" :key="index" v-for="(item, index) in productsMenu" class="sub-menu-item-container">
-                  <img class="sub-img" :src="item.image" />
-                  <div class="sub-menu-item-name">{{ item.name }}</div>
-                </router-link>
-              </div>
-            </el-popover> 
-          </el-menu-item>
-        </el-menu> -->
       </div>
     </div>
-    <el-drawer class="drawer" v-model="showDrawer" direction="rtl" size="830" :with-header="false" @opened="drawerOpened = true" @closed="drawerOpened = false">
-      <div
-        class="nav-container"
-        :style="{
-          opacity: drawerOpened ? 1 : 0,
-          backgroundColor: drawerOpened ? '#000' : 'transparent',
-        }"
-      >
-        <div class="menu-item" :key="index" :index="item.path" v-for="(item, index) in menu" @click="drawerMenuItemClick(item)">
-          <div class="menu-item-title" :class="path === item.path ? 'is-active' : ''">{{ item.name }}</div>
-        </div>
-      </div>
-      <div
-        class="drawer-content"
-        :style="{
-          backgroundColor: drawerOpened ? '#000' : 'transparent',
-          opacity: drawerOpened ? 1 : 0,
-        }"
-      >
-        <div class="sub-menu-item" :key="index" v-for="(subItem, index) in submenu" @click="drawerSubMenuItemClick(subItem)">{{ subItem.name }}</div>
-      </div>
-    </el-drawer>
     <div class="child-view">
       <router-view v-slot="{ Component, route }">
         <transition name="animation" mode="out-in">
@@ -106,9 +59,7 @@
 
                 <template v-else-if="item.linkType === 'type'">
                   <div class="title">
-                    <router-link :to="item.link">
-                      {{ item.sectionName }}
-                    </router-link>
+                    <router-link :to="item.link">{{ item.sectionName }}</router-link>
                   </div>
                 </template>
                 <template v-else>
@@ -120,11 +71,22 @@
                 <ul v-if="item.children">
                   <li :key="subIndex" v-for="(subItem, subIndex) in item.children">
                     <template v-if="item.sectionName === 'Contact Us'">
-                      <a href="mailto:404888541@qq.com">404888541@qq.com</a>
+                      <a :href="subItem.link">{{ item.children[0].sectionName }}</a>
                     </template>
                     <template v-else>
                       <router-link
-                        :to="item.link"
+                        v-if="item.linkType === 'scroll'"
+                        :to="`${item.link}`"
+                        v-scroll-to="{
+                          el: subItem.link,
+                          offset: -100,
+                        }"
+                      >
+                        {{ subItem.sectionName }}
+                      </router-link>
+                      <router-link
+                        v-else
+                        :to="`${item.link}?category=${subItem.sectionName}`"
                         v-scroll-to="{
                           el: subItem.link,
                           offset: -100,
@@ -141,16 +103,32 @@
         </el-row>
       </div>
     </div>
+
+    <div class="mobile-footer">
+      <div class="footer-logo-container">
+        <img @click="vueRouter.push({ path: '/' })" src="/assets/logo-veda.png" class="footer-logo" />
+      </div>
+
+      <div class="menu-container">
+        <div class="menu-header">Get in Touch</div>
+        <div class="menu-item" v-for="item in footerNav" :key="item.sectionName" @click="vueRouter.push({ path: item.link })">{{ item.sectionName }}</div>
+      </div>
+    </div>
   </el-container>
 </template>
 
 <script setup lang="ts">
-import { FooterNavItem, MenuItem } from "@/types/layout";
+import { FooterNavItem, MenuItem } from "@/type/layout";
 import { Menu } from "@element-plus/icons-vue";
-import layoutData from "@/data/layout";
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
+
+import { useProductStore } from "@/store/modules/product";
+import { useAppStore } from "@/store/modules/app";
+
 const vueRouter = useRouter();
+const productStore = useProductStore();
+const appStore = useAppStore();
 const isTop = ref<boolean>(false);
 window.addEventListener("scroll", () => {
   if (window.scrollY != 0) {
@@ -160,7 +138,6 @@ window.addEventListener("scroll", () => {
   }
 });
 
-const showDrawer = ref<boolean>(false);
 const drawerOpened = ref<boolean>(false);
 const path = ref("");
 const menu = ref<MenuItem[]>([
@@ -169,41 +146,20 @@ const menu = ref<MenuItem[]>([
   {
     name: "Products",
     path: "/productList",
-    children: [...layoutData.productsMenu],
   },
   { name: "Projects", path: "/projectList" },
-  { name: "Contact Us", path: "" },
+  { name: "Contact Us", path: "/contactUs" },
 ]);
-const submenu = ref<MenuItem[]>([]);
 const activeRoute = computed(() => {
   return vueRouter.currentRoute.value.path;
 });
-const menuItemClick = (item: MenuItem, isPopupButton = false) => {
+const menuItemClick = (item: MenuItem) => {
   path.value = item.path;
-  if (item.children && !isPopupButton) {
-    showDrawer.value = true;
-    submenu.value = item.children;
-  } else {
-    vueRouter.push({ path: path.value });
-  }
+  vueRouter.push({ path: path.value });
 };
-const drawerMenuItemClick = (item: MenuItem) => {
-  if (item.children) {
-    submenu.value = item.children;
-  } else {
-    submenu.value = [];
-  }
-  path.value = item.path;
-};
-const drawerSubMenuItemClick = (item: MenuItem) => {
-  vueRouter.push({
-    path: path.value,
-    query: {
-      type: item.path,
-    },
-  });
-  showDrawer.value = false;
-};
+
+const basicInfo = computed(() => appStore.getBasicInfo);
+const productCategories = computed(() => productStore.getProductCategories);
 
 const footerNav = ref<FooterNavItem[]>([
   {
@@ -224,32 +180,7 @@ const footerNav = ref<FooterNavItem[]>([
     sectionName: "Our Products",
     link: "/productList",
     linkType: "type",
-    children: [
-      {
-        sectionName: "Tiles",
-        link: "",
-      },
-      {
-        sectionName: "Natural Stones",
-        link: "",
-      },
-      {
-        sectionName: "Artificial Stones",
-        link: "",
-      },
-      {
-        sectionName: "Porcelain",
-        link: "",
-      },
-      {
-        sectionName: "Cabinet",
-        link: "",
-      },
-      {
-        sectionName: "Door",
-        link: "",
-      },
-    ],
+    children: productCategories.value.map((item) => ({ sectionName: item.label, link: "" })),
   },
   {
     sectionName: "Projects",
@@ -268,12 +199,12 @@ const footerNav = ref<FooterNavItem[]>([
   },
   {
     sectionName: "Contact Us",
-    link: "mailto:404888541@qq.com",
+    link: `/contactUs`,
     linkType: "external",
     children: [
       {
-        sectionName: "404888541@qq.com",
-        link: "",
+        sectionName: basicInfo.value.email,
+        link: `mailto:${basicInfo.value.email}`,
       },
     ],
   },
@@ -441,6 +372,57 @@ const footerNav = ref<FooterNavItem[]>([
             position: relative;
             left: 4px;
           }
+        }
+      }
+    }
+  }
+
+  .mobile-footer {
+    width: 100%;
+    background-color: #111;
+    padding: 20px;
+    display: none;
+
+    @include responseTo("xs") {
+      display: unset;
+    }
+
+    .footer-logo-container {
+      width: 100%;
+      margin-bottom: 20px;
+      .footer-logo {
+        width: 120px;
+      }
+    }
+    .menu-container {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      .menu-header {
+        font-size: 20px;
+        color: #fff;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .menu-item {
+        color: #fff;
+        font-size: 16px;
+        margin-bottom: 20px;
+        padding-left: 0px;
+        width: 50%;
+
+        &:before {
+          content: "";
+          width: 4px;
+          height: 4px;
+          display: inline-block;
+          border-radius: 50%;
+          background: #fff;
+          vertical-align: middle;
+          margin-right: 14px;
+          position: relative;
+          left: 4px;
         }
       }
     }

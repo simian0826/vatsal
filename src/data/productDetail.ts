@@ -1,4 +1,4 @@
-import { ProductDetail } from "@/types/productDetail";
+import { ProductDetail } from "@/type/productDetail";
 
 const productDetailData: Partial<ProductDetail>[] = [
   {

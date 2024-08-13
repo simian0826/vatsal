@@ -1,6 +1,6 @@
 <template>
   <div class="aobut-us-container">
-    <HeroSection />
+    <HeroSection :module="'about us'" />
 
     <div class="construct-container">
       <!-- <div class="why-section">
@@ -15,11 +15,11 @@
       </div>
 
       <div class="quality-section">
-        <div v-for="(item, index) in qualityItems" :key="index" class="quality-item">
+        <div v-for="(item, index) in aboutUsData?.qualityItems" :key="index" class="quality-item">
           <div class="icon-container">
-            <img :src="item.url" />
+            <img :src="item.image" />
           </div>
-          <div class="quality-header">{{ item.header }}</div>
+          <div class="quality-header">{{ item.title }}</div>
           <div class="quality-description">{{ item.desc }}</div>
         </div>
       </div>
@@ -36,15 +36,15 @@
         <div class="header">OUR TEAM</div>
 
         <div class="member-container">
-          <div v-for="(item, index) in members" :key="index" class="member-item">
+          <div v-for="(item, index) in aboutUsData?.teamMembers" :key="index" class="member-item">
             <div class="profile-container">
               <el-row align="middle" justify="center">
                 <el-col :xs="24" :sm="8" class="avatar-col">
-                  <img class="avatar" :src="item.url" />
+                  <img class="avatar" :src="item.image" />
                 </el-col>
                 <el-col :xs="24" :sm="16" class="name-col">
                   <div class="name">{{ item.name }}</div>
-                  <div class="desc">{{ item.desc }}</div>
+                  <div class="desc">{{ item.description }}</div>
                 </el-col>
               </el-row>
             </div>
@@ -54,8 +54,8 @@
     </div>
     <div class="need-help-container">
       <div class="content-container">
-        <div class="header">Reach Us?</div>
-        <div class="desc">Our team is standing by to make sure you get the help you need. Whether you need to place an order or adjust delivery details, we're ready to help!</div>
+        <div class="header">{{ aboutUsData?.needHelpHeader }}</div>
+        <div class="desc">{{ aboutUsData?.needHelpDesc }}</div>
 
         <div class="contact-btn">
           <a href="mailto:404888541@qq.com">Contact US Info</a>
@@ -67,43 +67,16 @@
 
 <script setup lang="ts">
 import HeroSection from "@/components/HeroSection.vue";
-import { ref } from "vue";
+import { ref, onBeforeMount } from "vue";
+import { getAboutUsPageApi } from "@/api";
+import { AboutUsPage } from "@/api/model";
 
-const qualityItems = ref([
-  {
-    url: "/assets/ourWarranty.png",
-    header: "Our Warranty",
-    desc: "All our products — whether we make them or not — are backed by our warranty.",
-  },
-  {
-    url: "/assets/shoppingExperience.png",
-    header: "Shopping Experience",
-    desc: "Can't find what you're looking for? We'll go on a hunt to find exactly what you need.",
-  },
-  {
-    url: "/assets/on-timeDelivery.png",
-    header: "On-time Delivery",
-    desc: "We ensure that your project gets the right materials at the right time.",
-  },
-  {
-    url: "/assets/qualityService.png",
-    header: "Quality Service",
-    desc: "Whether you need technical support or just a chat, we're here for you.",
-  },
-]);
+const aboutUsData = ref<AboutUsPage>();
 
-const members = ref([
-  {
-    url: "/assets/anil.png",
-    name: "Anil Agrawal",
-    desc: "Anil has a multi-faceted background in industries such as garment manufacturing and restaurants. Having run businesses across multiple countries, he has the expertise in finding the right manufacturers, ensuring quality control and managing logistical issues.",
-  },
-  {
-    url: "/assets/vatsal.png",
-    name: "Vatsal Shah",
-    desc: "Vatsal comes from a family with six decades of experience running a construction and real estate development powerhouse in India. He spearheads their firm's US division with a goal to match the Indian division's scale in just five short years. Through his involvement in this sector, he has intricate knowledge of the design, quality and value of materials used in construction.",
-  },
-]);
+onBeforeMount(async () => {
+  const res = await getAboutUsPageApi();
+  aboutUsData.value = res;
+});
 </script>
 
 <style scoped lang="scss">

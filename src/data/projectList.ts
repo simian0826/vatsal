@@ -1,4 +1,4 @@
-import { ProjectListItem } from "@/types/projectList";
+import { ProjectListItem } from "@/type/projectList";
 
 const projectListData: {
   heroImgUrl: string;

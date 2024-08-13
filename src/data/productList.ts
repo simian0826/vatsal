@@ -1,4 +1,4 @@
-import { CategoryListItem, CategoryItemGroupObject } from "@/types/productList";
+import { CategoryListItem, CategoryItemGroupObject } from "@/type/productList";
 
 const productListData: {
   heroImgUrl: string;

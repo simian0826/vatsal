@@ -1,6 +1,6 @@
 <template>
   <div class="project-list-container">
-    <HeroSection />
+    <HeroSection :module="'product'" />
     <div class="content-container">
       <el-row>
         <el-col :span="24" class="category-container">
@@ -9,77 +9,114 @@
             v-for="(item, index) in categoryList"
             class="category-item-container"
             :class="{
-              selected: selectedCategory == item.value,
+              selected: selectedCategory == item,
             }"
-            @click="changeCategoryHandler(item.value)"
+            @click="changeCategoryHandler(item)"
           >
-            <div class="category-name">{{ item.name }}</div>
+            <div class="category-name">{{ item }}</div>
           </div>
         </el-col>
 
         <el-col :span="24" class="list-container">
-          <div @click="router.push({ path: `/productDetail/${item.id}` })" v-for="(item, index) in presentItemList" :key="index" class="commodity-item-container">
+          <div @click="router.push({ path: `/productDetail/${item.id}` })" v-for="(item, index) in productList" :key="index" class="product-item-container">
             <div class="mask-container">
               <img class="icon" src="/assets/icons/link.png" />
             </div>
-            <img class="commodity-image" :src="item.img" />
+            <img class="product-image" :src="item.imgs[0]" />
             <div class="text-area">
-              <div class="commodity-type">{{ item.type }}</div>
-              <div class="commodity-name">{{ item.name }}</div>
+              <div class="product-name">{{ item.name }}</div>
             </div>
           </div>
         </el-col>
+
+        <div class="load-more-container">
+          <div
+            v-loading="loading"
+            :element-loading-spinner="LoadingSvg"
+            element-loading-svg-view-box="-10, -10, 50, 50"
+            element-loading-background="rgba(122, 122, 122, 0.8)"
+            class="load-more-btn"
+            v-if="loadMore"
+            @click="
+              () => {
+                productListHandler();
+              }
+            "
+          >
+            Load More
+          </div>
+
+          <div class="no-more" v-else>No More</div>
+        </div>
       </el-row>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from "vue";
-import productListData from "@/data/productList";
-import { CategoryTypeValue } from "@/types/productList";
+import { ref, computed, onBeforeMount, watch, unref } from "vue";
+import { CategoryTypeValue } from "@/type/productList";
 import HeroSection from "@/components/HeroSection.vue";
 import { useRouter } from "vue-router";
+import { useProductStore } from "@/store/modules/product";
+import { getProductListApi } from "@/api";
+import type { Pagenigation, Product } from "@/api/model";
+import { LoadingSvg } from "@/assets/loading";
 
 const router = useRouter();
 
-const selectedCategory = ref<CategoryTypeValue>("tiles");
+const loading = ref(false);
+const loadMore = ref(true);
 
-const categoryList = ref(productListData.categoryList);
+const productStore = useProductStore();
+const pagenigation = ref<Pagenigation>({ page: 1, pageSize: 6 });
+const categoryList = computed(() => productStore.getProductCategories.map((item) => item.value as CategoryTypeValue));
+const selectedCategory = ref<CategoryTypeValue>(categoryList.value[0]);
 
-const categoryItemGroup = ref(productListData.categoryItemGroup);
+const productList = ref<Product[]>([]);
+const productListHandler = async (isInit = false) => {
+  if (isInit) {
+    pagenigation.value.page = 1;
+    productList.value = [];
+  }
+  loading.value = true;
+  const res = await getProductListApi({ category: unref(selectedCategory), ...pagenigation.value });
+  loading.value = false;
 
-const presentItemList = ref(categoryItemGroup.value[selectedCategory.value]);
+  if (res.list.length > 0) {
+    productList.value.push(...res.list);
+  }
+  if (res.list.length != pagenigation.value.pageSize) {
+    loadMore.value = false;
+  }
+  pagenigation.value.page++;
+};
 
 const changeCategoryHandler = (category: CategoryTypeValue) => {
   selectedCategory.value = category;
-  presentItemList.value = categoryItemGroup.value[category];
+  productListHandler(true);
 };
 
-const routeProductType = computed(() => router.currentRoute.value.query.productType);
-watch(routeProductType, () => {
-  selectedCategory.value = router.currentRoute.value.query.productType as CategoryTypeValue;
-  presentItemList.value = categoryItemGroup.value[selectedCategory.value];
-});
-
 const urlProductTypeChangeHandler = () => {
-  if (router.currentRoute.value.query.type) {
-    selectedCategory.value = router.currentRoute.value.query.type as CategoryTypeValue;
+  if (router.currentRoute.value.query.category) {
+    selectedCategory.value = decodeURIComponent(router.currentRoute.value.query.category?.toString()) as CategoryTypeValue;
   } else {
-    const keys = Object.keys(categoryItemGroup.value) as CategoryTypeValue[];
-    selectedCategory.value = keys[0];
+    selectedCategory.value = categoryList.value.length > 0 ? categoryList.value[0] : "Tiles";
   }
-  presentItemList.value = categoryItemGroup.value[selectedCategory.value];
+  productListHandler(true);
 };
 watch(router.currentRoute, () => {
   urlProductTypeChangeHandler();
 });
-onMounted(() => {
+onBeforeMount(() => {
   urlProductTypeChangeHandler();
 });
 </script>
 
 <style scoped lang="scss">
+:deep(.el-loading-spinner .path) {
+  stroke: #fff;
+}
 .project-list-container {
   width: 100%;
   position: relative;
@@ -132,7 +169,7 @@ onMounted(() => {
 
         @include responseTo("xs") {
           grid-template-columns: repeat(3, 1fr);
-          padding: 6px 6px;
+          padding: 6px 4px;
         }
 
         @include responseTo("sm") {
@@ -156,7 +193,7 @@ onMounted(() => {
           text-transform: uppercase;
 
           @include responseTo("xs") {
-            font-size: 12px;
+            font-size: 11px;
           }
 
           @include responseTo("sm") {
@@ -179,11 +216,11 @@ onMounted(() => {
         grid-template-columns: repeat(3, 1fr);
       }
 
-      .commodity-item-container {
+      .product-item-container {
         position: relative;
         aspect-ratio: 1/1;
 
-        .commodity-image {
+        .product-image {
           width: 100%;
           height: 100%;
           position: absolute;
@@ -199,14 +236,16 @@ onMounted(() => {
           @include responseTo("xs") {
             font-size: 16px;
             padding: 10px 10px;
+            text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
           }
 
           @include responseTo("sm") {
-            font-size: 20px;
-            padding: 10px 20px;
+            font-size: 26px;
+            padding: 20px 20px;
+            text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
           }
 
-          .commodity-type {
+          .product-type {
             color: #fff;
             text-transform: uppercase;
             @include responseTo("xs") {
@@ -217,7 +256,7 @@ onMounted(() => {
               margin-bottom: 10px;
             }
           }
-          .commodity-name {
+          .product-name {
             color: #fff;
             text-transform: capitalize;
           }
@@ -249,6 +288,54 @@ onMounted(() => {
         }
       }
     }
+
+    .load-more-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+      .load-more-btn {
+        padding: 6px 12px;
+        border: 1px solid #fff;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: #fff;
+          color: #111;
+        }
+      }
+
+      .no-more {
+        --noMoreColor: #999;
+        font-size: 20px;
+        color: var(--noMoreColor);
+        position: relative;
+
+        &::before {
+          content: "";
+          width: 12px;
+          height: 1px;
+          position: absolute;
+          top: 50%;
+          left: -24px;
+          background-color: var(--noMoreColor);
+        }
+        &::after {
+          content: "";
+          width: 12px;
+          height: 1px;
+          position: absolute;
+          top: 50%;
+          right: -24px;
+          background-color: var(--noMoreColor);
+        }
+      }
+    }
   }
 }
 </style>
+@/assets/loading

@@ -1,16 +1,36 @@
 <template>
-  <div class="hero-seciton-container">
+  <div
+    class="hero-seciton-container"
+    :style="{
+      '--url': `url(${heroSection?.background})`,
+    }"
+  >
     <div class="carousel-item-container">
       <div class="content-container">
         <div class="content-block">
-          <div class="header">Value engineering made hassle free</div>
-          <div class="sub-header">Veda Sourcing is your one-stop solution for producing materials from all across the world</div>
+          <div class="header">{{ heroSection?.header }}</div>
+          <div class="sub-header">{{ heroSection?.content }}</div>
         </div>
       </div>
     </div>
   </div>
 </template>
 
+<script setup lang="ts">
+import type { SystemModule } from "@/api/model";
+import { defineProps, onMounted, computed } from "vue";
+import { useAppStore } from "@/store/modules/app";
+interface HeroSectionProps {
+  module: SystemModule;
+}
+const appStore = useAppStore();
+
+const props = defineProps<HeroSectionProps>();
+const heroSection = computed(() => appStore.fetchHeroSectionByModule(props.module));
+onMounted(() => {
+  console.log(props.module);
+});
+</script>
 <style scoped lang="scss">
 .hero-seciton-container {
   --url: url("/assets/home-banner.png");
@@ -61,7 +81,7 @@
           padding: 30px 20px;
 
           width: 95%;
-          top: 50%;
+          top: 40%;
           left: 50%;
           transform: translateX(-50%);
         }

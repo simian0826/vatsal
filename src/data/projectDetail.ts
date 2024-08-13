@@ -1,4 +1,4 @@
-import { MaterialItem } from "@/types/projectDetail";
+import { MaterialItem } from "@/type/projectDetail";
 
 const projectDetailData: {
   id: string;

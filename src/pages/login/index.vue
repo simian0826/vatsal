@@ -23,3 +23,4 @@ const handleLogin = async () => {
 };
 </script>
 <style scoped></style>
+@/type/http

@@ -1,6 +1,6 @@
 import { CategoryListItem } from "./productList";
 export type FooterNavItem = {
-  sectionName: string;
+  sectionName?: string;
   link: string;
   linkType?: "type" | "external" | "scroll";
   children?: FooterNavItem[];

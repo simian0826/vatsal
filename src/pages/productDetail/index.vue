@@ -1,26 +1,26 @@
 <template>
   <div class="project-container">
-    <HeroSection />
+    <HeroSection :module="'product'" />
 
     <div class="main-info-container">
       <div class="main-block">
         <el-row :gutter="breakpoint !== sizeEnum.XS ? 80 : 0">
           <el-col :xs="24" :sm="12">
-            <img class="main-img" :src="productDetail?.mainInfo?.imgs[mainImgIndex]" />
+            <img class="main-img" :src="productDetail?.imgs[mainImgIndex]" />
             <el-row :style="{ marginTop: breakpoint !== sizeEnum.XS ? 20 : 20 }" :gutter="breakpoint !== sizeEnum.XS ? 0 : 10">
-              <el-col :key="index" v-for="(img, index) in productDetail?.mainInfo?.imgs" :span="8">
+              <el-col :key="index" v-for="(img, index) in productDetail?.imgs" :span="8">
                 <img @click="mainImgIndex = index" class="list-img" :class="{ active: mainImgIndex == index }" :src="img" />
               </el-col>
             </el-row>
           </el-col>
           <el-col :xs="24" :sm="12">
-            <div class="category-block">{{ productDetail?.mainInfo?.categoty }}</div>
+            <div class="category-block">{{ productDetail?.category }}</div>
 
-            <div class="header">{{ productDetail?.mainInfo?.title }}</div>
+            <div class="header">{{ productDetail?.name }}</div>
 
             <div class="description-container">
               <p>
-                {{ productDetail?.mainInfo?.desc }}
+                {{ productDetail?.description }}
               </p>
             </div>
           </el-col>
@@ -31,8 +31,7 @@
     <div class="section-container">
       <div class="section" v-if="productDetail">
         <el-row>
-          <el-col :xs="24" :sm="16" class="left-container">
-            <div class="product-name">{{ productDetail.productName }}</div>
+          <el-col :xs="24" :sm="24" class="left-container">
             <Collapse style="margin-bottom: 20px" v-for="(property, index) in productDetail.properties" :key="index" :title="property.name">
               <div class="item-container">
                 <div class="property-item" v-for="(propertyItem, index) in property.items" :key="index">
@@ -42,16 +41,13 @@
             </Collapse>
             <Collapse title="Certificate">
               <div class="iso-container">
-                <img src="/assets/iso9001.png" />
-                <img src="/assets/iso.png" />
-
-                <img src="/assets/iso17025.png" />
+                <img v-for="item in productDetail.certificate" :key="item" :src="item" />
               </div>
             </Collapse>
           </el-col>
-          <el-col class="hidden-xs-only" :xs="12" :sm="8">
+          <!-- <el-col class="hidden-xs-only" :xs="12" :sm="8">
             <img class="product-info-img" :src="productDetail.productInfoImg" />
-          </el-col>
+          </el-col> -->
         </el-row>
       </div>
     </div>
@@ -62,32 +58,42 @@
 import HeroSection from "@/components/HeroSection.vue";
 
 import Collapse from "./components/Collapse.vue";
-import { ref } from "vue";
-import { Scrollbar } from "swiper/modules";
-import "swiper/css/scrollbar";
-import SwiperCore from "swiper";
-import productDetailDatas from "@/data/productDetail";
+import { ref, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ElNotification } from "element-plus";
 import { createBreakpointListen } from "@/hooks/useBreakpoint";
 import { sizeEnum } from "@/enums/breakPoint";
+import type { Product } from "@/api/model";
+import { getProductDetail } from "@/api";
+const { screenRef: breakpoint } = createBreakpointListen();
 
-SwiperCore.use([Scrollbar]);
 const route = useRoute();
 const router = useRouter();
 const productId = route.params.id;
-const productDetailData = productDetailDatas.find((item) => item.id == productId);
-if (!productDetailData) {
-  ElNotification({
-    title: "Error",
-    message: "Could not find product",
-    type: "error",
-  });
-  router.go(-1);
-}
 const mainImgIndex = ref(0);
-const productDetail = ref(productDetailData);
-const { screenRef: breakpoint } = createBreakpointListen();
+const productDetail = ref<Product>();
+onBeforeMount(async () => {
+  try {
+    const res = await getProductDetail(Number(productId));
+    productDetail.value = res;
+  } catch (error) {
+    ElNotification({
+      title: "Error",
+      message: "Could not find product",
+      type: "error",
+    });
+    router.go(-1);
+  }
+});
+
+// if (!productDetailData) {
+//   ElNotification({
+//     title: "Error",
+//     message: "Could not find product",
+//     type: "error",
+//   });
+//   router.go(-1);
+// }
 </script>
 
 <style scoped lang="scss">

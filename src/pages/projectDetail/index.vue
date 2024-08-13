@@ -1,12 +1,12 @@
 <template>
   <div class="project-container">
-    <HeroSection />
+    <HeroSection :module="'project'" />
 
     <div class="introduction-container">
-      <div class="sub-title">{{ projectDetail?.header.subtitle }}</div>
-      <div class="title">{{ projectDetail?.header.title }}</div>
+      <div class="sub-title">{{ projectDetail?.subtitle }}</div>
+      <div class="title">{{ projectDetail?.title }}</div>
       <div class="description">
-        {{ projectDetail?.header.description }}
+        {{ projectDetail?.description }}
       </div>
     </div>
 
@@ -27,10 +27,10 @@
           </div>
 
           <swiper
-            :swipeHandler="true"
             ref="swiperRef"
             :style="{
               height: '360px',
+              width: breakpoint === sizeEnum.XS ? '100%' : '100%',
             }"
             :pagination="swiperPagination"
             :space-between="20"
@@ -73,12 +73,7 @@
 <script setup lang="ts">
 import HeroSection from "@/components/HeroSection.vue";
 
-import projectDetailDatas from "@/data/projectDetail";
-
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ref, onMounted } from "vue";
-gsap.registerPlugin(ScrollTrigger);
 
 import { Navigation, Pagination, Controller } from "swiper/modules";
 import SwiperCore from "swiper";
@@ -87,6 +82,8 @@ import "swiper/scss";
 import "swiper/scss/navigation";
 import "swiper/scss/pagination";
 
+import type { Project } from "@/api/model";
+import { getProjectDetail } from "@/api";
 import { ElNotification } from "element-plus";
 import { useRoute, useRouter } from "vue-router";
 
@@ -123,23 +120,21 @@ let swiperPrevious = () => {
     swiperRef.value.$el.swiper.slidePrev();
   }
 };
+const projectDetail = ref<Project>();
 
-onMounted(() => {
-  // console.log(aboutUsBlockRefs);
-  console.log("swiperRef", swiperRef);
+onMounted(async () => {
+  try {
+    const res = await getProjectDetail(Number(projectId));
+    projectDetail.value = res;
+  } catch (error) {
+    ElNotification({
+      title: "Error",
+      message: "Could not find product",
+      type: "error",
+    });
+    router.go(-1);
+  }
 });
-
-const projectDetailData = projectDetailDatas.find((item) => item.id == projectId);
-if (!projectDetailData) {
-  ElNotification({
-    title: "Error",
-    message: "Could not find product",
-    type: "error",
-  });
-  router.go(-1);
-}
-
-const projectDetail = ref(projectDetailData);
 
 // const productList = ref([
 //   {

@@ -56,6 +56,11 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "AboutUs",
         component: () => import("@/pages/aboutUs/index.vue"),
       },
+      {
+        path: "/contactUs",
+        name: "ContactUs",
+        component: () => import("@/pages/contactUs/index.vue"),
+      },
     ],
   },
   {

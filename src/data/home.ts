@@ -1,4 +1,4 @@
-import { HomeProductItem, IntroductionItem } from "@/types/home";
+import { HomeProductItem, IntroductionItem } from "@/type/home";
 // import { CategoryListItem } from "@/types/productList";
 
 const homeData: {

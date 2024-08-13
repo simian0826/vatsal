@@ -1,6 +1,6 @@
 <template>
   <div class="home-container">
-    <HeroSection />
+    <HeroSection :module="'home'" />
     <div class="about-us-container">
       <div class="header">
         <el-row>
@@ -16,7 +16,7 @@
       </div>
 
       <el-row class="content" :gutter="20">
-        <el-col :xs="24" :sm="8" :key="index" class="block-col" v-for="(item, index) in introductionItems">
+        <el-col :xs="24" :sm="8" :key="index" class="block-col" v-for="(item, index) in processItems">
           <div
             class="block-container"
             :style="{
@@ -41,7 +41,7 @@
             disableOnInteraction: false,
           }" -->
         <swiper-container v-if="breakpoint !== sizeEnum.XS" ref="productSwiperRef" :pagination="productSwiperPaginationSM" class="product-swiper" :space-between="80" :speed="500">
-          <swiper-slide class="swiper-slide" v-for="(item, index) in processItems" :key="index">
+          <swiper-slide class="swiper-slide" v-for="(item, index) in introductionItems" :key="index">
             <el-row :gutter="30">
               <el-col :sm="10">
                 <div class="process-header">{{ item.title }}</div>
@@ -50,10 +50,16 @@
                   {{ item.description }}
                 </div>
                 <div class="value-container">
-                  <div class="left">{{ item.percentage }}%</div>
-                  <div class="right">{{ item.amount }}+</div>
+                  <div class="left">
+                    <div class="info">{{ item.infoLeft.info }}</div>
+                    <div class="supplementary">{{ item.infoLeft.supplementary }}</div>
+                  </div>
+                  <div class="right">
+                    <div class="info">{{ item.infoRight.info }}</div>
+                    <div class="supplementary">{{ item.infoRight.supplementary }}</div>
+                  </div>
                 </div>
-                <div class="about-me-btn">More about me</div>
+                <div @click="router.push({ path: `/productDetail/${item.productId}` })" class="about-me-btn">More about me</div>
               </el-col>
 
               <el-col :xs="24" :sm="14" style="position: relative">
@@ -69,7 +75,7 @@
         </swiper-container>
 
         <swiper-container v-else ref="productSwiperRef" :pagination="productSwiperPaginationXS" class="product-swiper" :space-between="20" :speed="500">
-          <swiper-slide class="swiper-slide" v-for="(item, index) in processItems" :key="index">
+          <swiper-slide class="swiper-slide" v-for="(item, index) in introductionItems" :key="index">
             <el-row :gutter="30" style="padding: 0 30px">
               <el-col :xs="24" style="position: relative">
                 <img :src="item.image" class="process-img" />
@@ -83,9 +89,15 @@
                   {{ item.description }}
                 </div>
                 <div class="value-container">
-                  <div class="left">{{ item.percentage }}%</div>
-                  <div class="right">{{ item.amount }}+</div>
-                  <div class="about-me-btn">More about me</div>
+                  <div class="left">
+                    <div class="info">{{ item.infoLeft.info }}</div>
+                    <div class="supplementary">{{ item.infoLeft.supplementary }}</div>
+                  </div>
+                  <div class="right">
+                    <div class="info">{{ item.infoRight.info }}</div>
+                    <div class="supplementary">{{ item.infoRight.supplementary }}</div>
+                  </div>
+                  <div @click="router.push({ path: `/productDetail/${item.productId}` })" class="about-me-btn">More about me</div>
                 </div>
               </el-col>
             </el-row>
@@ -120,9 +132,10 @@
 
       <div class="product-grid-container">
         <div
+          @click="router.push({ path: `/productList`, query: { category: item.category } })"
           class="product-item"
           :key="index"
-          v-for="(item, index) in productItems"
+          v-for="(item, index) in productCategoryItems"
           :style="{
             'background-image': `url('${item.image}')`,
           }"
@@ -141,7 +154,7 @@
       </div>
       <div class="content">
         <div class="logo-container">
-          <div class="logo-block" :key="index" v-for="(item, index) in clientItems">
+          <div class="logo-block" :key="index" v-for="(item, index) in clientLogos">
             <img class="logo" :src="item" />
           </div>
         </div>
@@ -200,12 +213,15 @@
 
 <script setup lang="ts">
 import HeroSection from "@/components/HeroSection.vue";
-
-import homeData from "@/data/home";
+import { getHomePageApi } from "@/api/";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ref, watch } from "vue";
+import { ref, watch, onBeforeMount } from "vue";
+import { useRouter } from "vue-router";
+
 gsap.registerPlugin(ScrollTrigger);
+
+const router = useRouter();
 
 import { Scrollbar } from "swiper/modules";
 import "swiper/css/scrollbar";
@@ -322,8 +338,8 @@ let productSwiperPaginationSM = {
 
 // });
 
-const introductionItems = ref(homeData.introductionItems);
-const processItems = ref(homeData.processItems);
+const introductionItems = ref();
+const processItems = ref();
 //详情图
 const detailImageVisible = ref(false);
 const detailImage = ref("");
@@ -333,11 +349,20 @@ const showImage = (src: string) => {
   detailImage.value = src;
 };
 
-const productItems = ref(homeData.productItems);
+const productCategoryItems = ref();
 
-const clientItems = ref(homeData.clientLogos);
+const clientLogos = ref();
 
-const leaders = ref(homeData.leaders);
+const leaders = ref();
+
+onBeforeMount(async () => {
+  const res = await getHomePageApi();
+  processItems.value = res.processItems;
+  introductionItems.value = res.introductionItems;
+  productCategoryItems.value = res.productCategoryItems;
+  clientLogos.value = res.clientLogos;
+  leaders.value = res.leaders;
+});
 </script>
 
 <style scoped lang="scss">
@@ -704,7 +729,7 @@ const leaders = ref(homeData.leaders);
               margin: 20px 0;
               // text-align: center;
               align-items: center;
-              padding: 0 16px;
+              flex-wrap: wrap;
             }
             @include responseTo("sm") {
               font-weight: 400;
@@ -714,7 +739,29 @@ const leaders = ref(homeData.leaders);
 
             .left,
             .right {
-              flex: 1;
+              padding: 0 16px;
+              @include responseTo("xs") {
+                width: 50%;
+              }
+              @include responseTo("sm") {
+                flex: 1;
+              }
+
+              .info {
+                margin-bottom: 10px;
+                @include responseTo("xs") {
+                  text-align: center;
+                }
+              }
+              .supplementary {
+                color: #e2e0e0;
+                @include responseTo("xs") {
+                  font-size: 14px;
+                }
+                @include responseTo("sm") {
+                  font-size: 12px;
+                }
+              }
             }
           }
           .about-me-btn {
@@ -722,26 +769,28 @@ const leaders = ref(homeData.leaders);
             color: #fff;
             text-align: center;
             display: inline-block;
-
+            cursor: pointer;
             @include responseTo("xs") {
               font-size: 12px;
               padding: 10px 6px;
               font-weight: 400;
               border-radius: 20px;
-              flex: 1;
+              width: 100%;
+              margin-top: 20px;
             }
             @include responseTo("sm") {
               padding: 16px 40px;
               border-radius: 30px;
               font-size: 18px;
               font-weight: 400;
+              flex: 1;
             }
           }
 
           .process-img {
             aspect-ratio: 1/1;
             width: 100%;
-            // height: 100%;
+            height: 100%;
             @include responseTo("xs") {
               border-top: 1px solid #666;
               border-left: 1px solid #666;
@@ -824,6 +873,8 @@ const leaders = ref(homeData.leaders);
       }
 
       .product-item {
+        cursor: pointer;
+
         aspect-ratio: 1/1;
         position: relative;
 

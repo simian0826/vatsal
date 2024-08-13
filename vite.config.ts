@@ -28,8 +28,24 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
       }),
     ],
     server: {
+      hmr: {
+        overlay: false,
+      },
+      host: true,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+      cors: true,
+      port: 5173,
+      origin: "http://localhost:5173",
       proxy: {
-        "/api": "http://localhost:5173",
+        "/veda-source": {
+          // target: "http://172.16.100.153:8080",
+          target: "http://localhost:8080",
+
+          changeOrigin: true,
+          secure: true,
+        },
       },
     },
     build: {
