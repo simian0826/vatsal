@@ -29,15 +29,15 @@
           </div>
         </div>
         <div class="block contact-form">
-          <el-form :model="form" :rules="rules" ref="formRef" label-width="auto">
+          <el-form :model="form" :rules="rules" ref="formRef">
             <el-form-item class="form-item" prop="name">
               <MaterialInput label="name" v-model="form.name" />
             </el-form-item>
             <el-form-item class="form-item" prop="email">
               <MaterialInput label="email" v-model="form.email" />
             </el-form-item>
-            <el-form-item class="form-item" prop="mobile">
-              <MaterialInput label="mobile" v-model="form.mobile" />
+            <el-form-item class="form-item" prop="subject">
+              <MaterialInput label="subject" v-model="form.subject" />
             </el-form-item>
             <el-form-item class="form-item" prop="message">
               <MaterialInput label="message" v-model="form.message" />
@@ -78,7 +78,7 @@ const appStore = useAppStore();
 const form = reactive<ContactUsRequest>({
   name: "",
   email: "",
-  mobile: "",
+  subject: "",
   message: "",
 });
 
@@ -86,10 +86,11 @@ const formRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
   name: [{ required: true, message: "Please input your name", trigger: "blur" }],
   email: [
-    { required: true, type: "email", message: "Please input your eamil", trigger: "blur" },
-    { required: true, type: "email", message: "Your eamil format is not correct", trigger: "blur" },
+    { type: "email", message: "Your eamil format is not correct", trigger: "blur" },
+
+    { required: true, message: "Please input your eamil", trigger: "blur" },
   ],
-  mobile: [{ required: true, message: "Please input your mobile", trigger: "blur" }],
+  subject: [{ required: true, message: "Please input your subject", trigger: "blur" }],
   message: [{ required: true, message: "Please input your message", trigger: "blur" }],
 });
 

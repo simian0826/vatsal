@@ -53,7 +53,7 @@ export type IntroductionInfo = {
 };
 
 export type HomeProductionCategoryItem = {
-  title: number;
+  title: string;
   image: string;
   category: string;
 };
@@ -122,6 +122,6 @@ export type ProjectMaterial = {
 export type ContactUsRequest = {
   name: string;
   email: string;
-  mobile: string;
+  subject: string;
   message: string;
 };

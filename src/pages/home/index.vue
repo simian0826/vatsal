@@ -26,7 +26,7 @@
             <div class="block">
               <div class="title">{{ item.title }}</div>
             </div>
-            <div class="detail-text">{{ item.detaiText }}</div>
+            <div class="detail-text">{{ item.detailText }}</div>
           </div>
         </el-col>
       </el-row>

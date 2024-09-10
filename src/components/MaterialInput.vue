@@ -13,14 +13,15 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits, ref, onBeforeMount } from "vue";
-interface MaterilaInputProps {
+type MaterilaInputProps = {
   type?: string;
   modelValue: string;
   label: string;
-}
+};
+
 const emit = defineEmits(["update:modelValue", "change", "blur", "focus"]);
-const isLabel = ref(false);
 const props = defineProps<MaterilaInputProps>();
+const isLabel = ref(false);
 
 const handleChange = (e) => {
   emit("update:modelValue", e.target.value);
