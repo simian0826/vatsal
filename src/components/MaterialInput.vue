@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount } from "vue";
 type MaterilaInputProps = {
   type?: string;
   modelValue: string;

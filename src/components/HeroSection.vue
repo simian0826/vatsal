@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import type { SystemModule } from "@/api/model";
-import { defineProps, onMounted, computed } from "vue";
+import { onMounted, computed } from "vue";
 import { useAppStore } from "@/store/modules/app";
 interface HeroSectionProps {
   module: SystemModule;

@@ -13,11 +13,6 @@ import Layout from "@/layout/index.vue";
 
 export const constantRoutes: RouteRecordRaw[] = [
   {
-    path: "/login",
-    component: () => import("@/pages/login/index.vue"),
-    name: "Login",
-  },
-  {
     path: "/",
     name: "Root",
     redirect: "/home",
