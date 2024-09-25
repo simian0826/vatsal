@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --open",
-    "build": "vue-tsc --noEmit && vite build --mode production && node toFile.mjs",
+    "build": "vue-tsc --noEmit && vite build --mode production",
+    "build:demo": "vue-tsc --noEmit && vite build --mode production && node toFile.mjs",
     "build:test": "vue-tsc && vite build --mode test",
     "build:prod": "vue-tsc && vite build --mode prod",
     "preview": "vite preview",
