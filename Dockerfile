@@ -42,7 +42,7 @@ COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # 根据需要进行 nginx 配置
 # COPY nginx.conf /etc/nginx/nginx.conf
-COPY /app/default.conf /etc/nginx/nginx.conf
+COPY default.conf /etc/nginx/nginx.conf
 # 暴露容器的 80 端口
 EXPOSE 80
 
