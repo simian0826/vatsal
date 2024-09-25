@@ -10,6 +10,7 @@ import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 export default ({ command }: ConfigEnv): UserConfigExport => {
   return {
     // root: "/",
+    // publicPath: "/",
     base: "./",
     plugins: [
       vue(),
