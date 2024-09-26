@@ -120,9 +120,9 @@
 <script setup lang="ts">
 import { FooterNavItem, MenuItem } from "@/type/layout";
 import { Menu } from "@element-plus/icons-vue";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
-
+import { Dict } from "@/api/model/";
 import { useProductStore } from "@/store/modules/product";
 import { useAppStore } from "@/store/modules/app";
 
@@ -159,7 +159,8 @@ const menuItemClick = (item: MenuItem) => {
 };
 
 const basicInfo = computed(() => appStore.getBasicInfo);
-const productCategories = computed(() => productStore.getProductCategories);
+// const productCategories = computed(() => productStore.getProductCategories);
+const productCategories = ref<Dict[]>([]);
 
 const footerNav = ref<FooterNavItem[]>([
   {
@@ -209,6 +210,11 @@ const footerNav = ref<FooterNavItem[]>([
     ],
   },
 ]);
+onMounted(async () => {
+  await productStore.fetchProductCategoriesAction();
+  productCategories.value = productStore.getProductCategories;
+  footerNav.value[1].children = productCategories.value.map((item) => ({ sectionName: item.label, link: "" }));
+});
 </script>
 <style scoped lang="scss">
 .animation-enter-from,
